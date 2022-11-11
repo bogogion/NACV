@@ -5,7 +5,7 @@ Makefile included in repository, updated as needed.
 
 `make` or `sudo make install` for global installation (requires sudo permissions)
 
-**IMPORTANT, the apriltag library is required to be built as a library and to have proper include paths.
+**IMPORTANT, the apriltag library is required to be built as a library and to have proper include paths.**
 
 For instructions and github link: [Apriltag Github](https://github.com/AprilRobotics/apriltag)
 
@@ -18,7 +18,7 @@ For instructions and github link: [Apriltag Github](https://github.com/AprilRobo
 
 ## System Diagram
 * Rasberry PI
-..* Computer Vision code, written in C.
-..* Possible Image replaying (replication to other remote clients, ie. a controller)
+    * Computer Vision code, written in C.
+    * Possible Image replaying (replication to other remote clients, ie. a controller)
 * Robo Rio
-..* Robot Control
+    * Robot Control
