@@ -3,7 +3,7 @@
 ## Compilation
 Makefile included in repository, updated as needed.
 
-`make` or `sudo make install` for global installation (requires sudo permissions)
+`make` to install, install option later added once code complete.
 
 **IMPORTANT, the apriltag library is required to be built as a library and to have proper include paths.**
 
