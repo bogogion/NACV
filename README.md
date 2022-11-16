@@ -12,7 +12,7 @@ For instructions and github link: [Apriltag Github](https://github.com/AprilRobo
 ## Current Todo:
 - Accurate AprilTag detection from long distances
 - Image distance via calibration of image
-- Change Family to 16h11
+- ~~Change Family to 16h11~~
 - Create test enviroment for pictures
 - Use video4linux API to natively process live video
 
