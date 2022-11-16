@@ -14,6 +14,7 @@ int main()
 	apriltag_family_t *tf = tag36h11_create();
 	apriltag_detector_add_family(td,tf);
 	zarray_t *detections = apriltag_detector_detect(td,im);
+	calibration_data_t cdata;
 	for(int i = 0; i < zarray_size(detections); i++)
 	{
 		apriltag_detection_t *det;
@@ -32,8 +33,6 @@ int main()
 	
 		printf("L1: %f\n",calc_distance(det->p[0][0],det->p[0][1],det->p[1][0],det->p[1][1]));
 		printf("L2: %f\n",calc_distance(det->p[0][0],det->p[0][1],det->p[3][0],det->p[3][1]));
-		save_calibration_data("calibration",calc_area(det->p));
-		printf("CALIBRATION: %f\n",load_calibration_from_file("calibration"));
 		printf("AREA: %f\n",calc_area(det->p));
 	}
 	tag36h11_destroy(tf);
