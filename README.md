@@ -21,4 +21,5 @@ For instructions and github link: [Apriltag Github](https://github.com/AprilRobo
     * Computer Vision code, written in C.
     * Possible Image replaying (replication to other remote clients, ie. a controller)
 * Robo Rio
-    * Robot Control
+    * Takes data from PI
+    * Interprets and acts on that data in the Java code
