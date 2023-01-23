@@ -2,6 +2,7 @@
 #include <apriltag/apriltag.h>
 #include <apriltag/tag36h11.h>
 #include <apriltag/common/image_u8.h>
+#include <apriltag/common/matd.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,9 +32,32 @@ int main()
 		printf("C3: %f,%f\n", det->p[2][0],det->p[2][1]);
 		printf("C4: %f,%f\n", det->p[3][0],det->p[3][1]);
 	
+		/* matd_t *H */
+		printf("nrows: %i\n", det->H->nrows);
+		printf("ncols: %i\n", det->H->ncols);
+		
+		double *data = det->H->data;
+		
+		for(int i = 0; i < det->H->nrows;i++)
+		{
+			for(int j = 0; j < det->H->ncols;j++)
+			{
+				printf("R:%i C:%i D:%f \n",i+1,j+1,data[(i*det->H->ncols) + j]);
+			}
+		}
+
+
+
 		printf("L1: %f\n",calc_distance(det->p[0][0],det->p[0][1],det->p[1][0],det->p[1][1]));
 		printf("L2: %f\n",calc_distance(det->p[0][0],det->p[0][1],det->p[3][0],det->p[3][1]));
 		printf("AREA: %f\n",calc_area(det->p));
+		cdata.ft = 3;
+		cdata.area = calc_area(det->p);
+		printf("DIST %fft, %fin\n",calc_distance_tags(&cdata,200000),calc_distance_tags(&cdata,200000)*12);
+		float res[2] = {1000,1000}; /* Test res, should be res of camera */
+		float off[2] = {0}; /*Initalize the storage variable*/
+		local_offset(det->c,res,&off);
+		printf("OFFSET: %f,%f\n",off[0],off[1]);
 	}
 	tag36h11_destroy(tf);
 	apriltag_detector_destroy(td);
