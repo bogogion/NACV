@@ -10,12 +10,13 @@
 #include "main.h"
 int main()
 {
-	image_u8_t* im = image_u8_create_from_pnm("test.pgm");
+	image_u8_t* im = image_u8_create_from_pnm("out001.ppm");
 	apriltag_detector_t *td = apriltag_detector_create();
 	apriltag_family_t *tf = tag36h11_create();
 	apriltag_detector_add_family(td,tf);
 	zarray_t *detections = apriltag_detector_detect(td,im);
 	calibration_data_t cdata;
+	printf("%i\n", sizeof(&detections));
 	for(int i = 0; i < zarray_size(detections); i++)
 	{
 		apriltag_detection_t *det;
