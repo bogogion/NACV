@@ -1,26 +1,82 @@
 #include <apriltag/common/zarray.h>
 #include <apriltag/apriltag.h>
-#include <apriltag/tag36h11.h>
+#include <apriltag/tag16h5.h>
 #include <apriltag/common/image_u8.h>
 #include <apriltag/common/matd.h>
-
+#include <apriltag/common/math_util.h>
+#include "processing.h"
+#include "camera.h"
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "main.h"
+#include <unistd.h>
+#include <sys/time.h>
+#include <sys/types.h>
+
+void main_loop(image_u8_t *im, struct buffer *buffers, apriltag_detector_t *td, int stride)
+{
+	int fd = init_everything(640,480, "/dev/video0", buffers);
+	fd_set fds;
+	struct timeval tv;
+	/* Start stream! */
+	start_stream(fd);
+	
+	/* Main loop, handles detections! */
+
+	uint32_t buflen = ((640,480)*3);
+	uint8_t *buffer = malloc(buflen);
+	
+	printf("Created buffers\n");
+
+	int *info;
+
+	while(1)
+	{
+		info = grab_frame();
+		printf("Before memcpy %i %i \n",info[0],info[1]);
+		memcpy(buffer, buffers[info[0]].start, info[1]);
+		printf("After memcpy\n");
+		convert_rgb24_proper(640,480,stride,buffer,im);
+
+		zarray_t *detections = apriltag_detector_detect(td,im);
+		printf("DETECTIONS: %i\n", zarray_size(detections));
+		requeue(); /* Continue */
+	}
+}
+
+
+
 int main()
 {
-	image_u8_t* im = image_u8_create_from_pnm("out001.ppm");
+	
+	int stride = generate_stride(640, DEFAULT_ALIGNMENT_U8);
+
+	image_u8_t *im = create_image_u8(640,480,stride);
+
+	struct buffer *buffers; 
+
 	apriltag_detector_t *td = apriltag_detector_create();
-	apriltag_family_t *tf = tag36h11_create();
+	apriltag_family_t *tf = tag16h5_create();
 	apriltag_detector_add_family(td,tf);
+	
+	main_loop(im,buffers,td,stride);
+
+
+
 	zarray_t *detections = apriltag_detector_detect(td,im);
 	calibration_data_t cdata;
-	printf("%i\n", sizeof(&detections));
+	printf("%i\n", zarray_size(detections));
 	for(int i = 0; i < zarray_size(detections); i++)
 	{
 		apriltag_detection_t *det;
 		zarray_get(detections,i,&det);
+
+		/* False-positive detection */
+
+		if(det->decision_margin < 10)
+		{
+			continue;
+		}
 		printf("DETECTION: %i\n",i+1);
 		printf("LOCATION: %f,%f\n",det->c[0],det->c[1]);
 		printf("DECISION_M: %f\n",det->decision_margin);

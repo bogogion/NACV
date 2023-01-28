@@ -12,15 +12,26 @@
 #include "../lib/libv4l/include/libv4l2.h"
 #include "camera.h"
 
-int main()
+void xioctl(int fh, int request, void *arg)
 {
-	int fd = init_cam("/dev/video0");
-	struct buffer *buffers;
+	int r;
+	do {
+		r = v4l2_ioctl(fh,request,arg);
+	} while (r == -1 && ((errno == EINTR) || (errno == EAGAIN)));
+
+	if(r == -1)
+	{
+		perror("XIOCTL_CALL");
+		exit(EXIT_FAILURE);
+	}
+}
+
+
+int init_everything(int width, int height, char *dev_name, struct buffer *buffers)
+{
+	int fd = init_cam("/dev/video0",width,height);
 	init_mmap(buffers);
-	start_stream(fd);
-	sleep(5);
-	close_cam(fd,buffers);
-	return 0; /* Remove in final product, used for test */
+	return fd;
 }
 
 /* Declare variables */
@@ -75,7 +86,41 @@ void init_mmap(struct buffer *buffers)
 		v_buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;	
 		v_buf.memory = V4L2_MEMORY_MMAP;
 		v_buf.index = i;
+		xioctl(fd, VIDIOC_QBUF, &v_buf);
 	}
+}
+
+int * grab_frame()
+{	
+	static int info[2];
+	do {
+               	FD_ZERO(&fds);
+               	FD_SET(fd, &fds);
+		 
+                /* Timeout. */
+             	tv.tv_sec = 2;
+		tv.tv_usec = 0;
+
+                r = select(fd + 1, &fds, NULL, NULL, &tv);
+         } while ((r == -1 && (errno = EINTR)));
+         if (r == -1) {
+                perror("select");
+         }
+
+         CLEAR(v_buf);
+         v_buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+         v_buf.memory = V4L2_MEMORY_MMAP;
+         xioctl(fd, VIDIOC_DQBUF, &v_buf);
+
+	 info[0] = v_buf.index;
+	 info[1] = v_buf.bytesused;
+
+	 return info;
+}
+
+void requeue()
+{
+	xioctl(fd, VIDIOC_QBUF, &v_buf);
 }
 
 void set_cam_settings(int width, int height, int pformat)
@@ -103,10 +148,10 @@ void set_cam_settings(int width, int height, int pformat)
 	}
 }
 
-int init_cam(char *dev_name)
+int init_cam(char *dev_name, int width, int height)
 {
 	fd = v4l2_open(dev_name, O_RDWR | O_NONBLOCK, 0);
-	set_cam_settings(1280,720,V4L2_PIX_FMT_RGB24);
+	set_cam_settings(width,height,V4L2_PIX_FMT_RGB24);
 	return fd;
 }
 

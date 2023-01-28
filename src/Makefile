@@ -1,7 +1,7 @@
 CC = gcc
-SRCS = main.*
+SRCS = main.* processing.* camera.*
 C_SRCS = camera.*
-LIB = -lapriltag -lm 
+LIB = -lapriltag -lm -lv4l2
 C_LIB = -lv4l2
 TARGET = main
 C_TARGET = camera

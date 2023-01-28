@@ -22,7 +22,7 @@
 #include <sys/mman.h>
 #include <linux/videodev2.h>
 #include "../lib/libv4l/include/libv4l2.h"
-
+#include "../lib/libv4l/include/libv4lconvert.h"
 #define CLEAR(x) memset(&(x), 0, sizeof(x))
 
 struct buffer {
@@ -67,8 +67,8 @@ int main(int argc, char argv[])
 
         CLEAR(fmt);
         fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-        fmt.fmt.pix.width       = 1280;
-        fmt.fmt.pix.height      = 720;
+        fmt.fmt.pix.width       = 640;
+        fmt.fmt.pix.height      = 480;
         fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_RGB24;
         fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED;
         xioctl(fd, VIDIOC_S_FMT, &fmt);
@@ -81,6 +81,25 @@ int main(int argc, char argv[])
                 printf("Warning: driver is sending image at %dx%d\\n",
                         fmt.fmt.pix.width, fmt.fmt.pix.height);
 	*/
+	/*
+	struct v4l2_format nfmt;
+	nfmt.fmt.pix.width = 640;
+	nfmt.fmt.pix.height = 480;
+	nfmt.fmt.pix.pixelformat = V4L2_PIX_FMT_GREY;
+	nfmt.fmt.pix.field = V4L2_FIELD_INTERLACED;
+
+	struct v4lconvert_data data;
+	data = v4lconvert_create(fd);
+	*/
+	/* Seeing if the conversion is needed! TEST */
+	/*
+	if(v4lconvert_needs_conversion(&data,&fmt,&nfmt))
+	{
+		printf("NEEDS CONVERSION");
+	
+	} */
+		
+
         CLEAR(req);
         req.count = 2;
         req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -139,14 +158,14 @@ int main(int argc, char argv[])
                 buf.memory = V4L2_MEMORY_MMAP;
                 xioctl(fd, VIDIOC_DQBUF, &buf);
 
-                sprintf(out_name, "out%03d.pgm", i);
+                sprintf(out_name, "out%03d.ppm", i);
                 fout = fopen(out_name, "w");
                 if (!fout) {
                         perror("Cannot open image");
                         exit(EXIT_FAILURE);
                 }
-                fprintf(fout, "P5\n%d %d 255\n",
-                        fmt.fmt.pix.width, fmt.fmt.pix.height);
+               fprintf(fout, "P6\n%d %d 255\n",
+                        fmt.fmt.pix.width, fmt.fmt.pix.height); 
                 fwrite(buffers[buf.index].start, buf.bytesused, 1, fout);
                 fclose(fout);
 
