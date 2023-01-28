@@ -24,11 +24,9 @@ For instructions and github link: [Apriltag Github](https://github.com/AprilRobo
 
 ## Current Todo:
 - Remake Camera code to be cleaner and optimized.
-- Finish using libv4l to allow for direct pgm binary conversion. 
 - Write complete documentation on camera code for further maintence.
 - Compile and import code onto Raspberry PI and mount on robot.
 - Write code to communicate with the Java code (either analog pins or networking).
-- Finish data -> apriltag pipeline.
 - Write conditions and math for detections.
 - Test.
 
