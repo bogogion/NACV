@@ -96,7 +96,7 @@ void init_mmap()
 	}
 }
 
-zarray_t* get_detections(apriltag_detector_t *td, image_u8_t *im, uint8_buf_t *uint8_buf)
+zarray_t* get_detections(apriltag_detector_t *td, image_u8_t *im)
 {	
 	do {
                	FD_ZERO(&fds);

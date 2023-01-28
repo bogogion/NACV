@@ -36,13 +36,10 @@ int main()
 
 	int stride = generate_stride(WIDTH, 96);
 	image_u8_t *im = create_image_u8(WIDTH,HEIGHT,stride);
-	uint8_buf_t uint8_buf;
-
-
-	uint8_buf.buflen = ((WIDTH*HEIGHT*3));
-	uint8_buf.data = malloc(uint8_buf.buflen);
 	
 	int fd = init_everything(WIDTH,HEIGHT,"/dev/video0");
+
+	start_stream(fd);
 
 	apriltag_detector_t *td = apriltag_detector_create();
 	apriltag_family_t *tf = tag16h5_create();
@@ -52,12 +49,9 @@ int main()
 
 	signal(SIGINT, intHandler);
 	apriltag_detection_t *det;
-
-	start_stream(fd);
-	time(&start);
 	while(run)
 	{
-		zarray_t* detections = get_detections(td,im,&uint8_buf);
+		zarray_t* detections = get_detections(td,im);
 
 		if(zarray_size(detections) != 0)
 		{
@@ -74,8 +68,6 @@ int main()
 		}
 		zarray_destroy(detections);
 	}
-	time(&end);
-
 	printf("%f\n", (end - start));
 
 	close_cam(fd);

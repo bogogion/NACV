@@ -16,16 +16,9 @@ struct buffer {
 	size_t    length;
 };
 
-typedef struct buffer_uint8
-{
-	uint32_t buflen; /* Length in bytes (width * height * 3)*/
-	uint8_t  *data;
-
-} uint8_buf_t;
-
 /* Ease of use function, used for safe v4l2_ calls */
 void xioctl(int fh, int request, void *arg);
-zarray_t * get_detections(apriltag_detector_t *td,image_u8_t *im, uint8_buf_t *uint8_buf); /* Reminder; make sure to free the zarray_t generated*/
+zarray_t * get_detections(apriltag_detector_t *td,image_u8_t *im); /* Reminder; make sure to free the zarray_t generated*/
 int init_everything(int width, int height, char *dev_name);
 void init_mmap(); 
 void set_cam_settings(int width, int height, int pformat); /* Used internally in init_cam */
