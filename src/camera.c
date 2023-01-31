@@ -35,6 +35,8 @@ void xioctl(int fh, int request, void *arg)
 
 /* Declare variables */
 /* Global for ease of use */
+struct v4l2_control         user_ctrl;
+struct v4l2_ext_control     cam_ctrl;
 struct v4l2_format	    format;
 struct v4l2_buffer	    v_buf;
 struct v4l2_requestbuffers  v_request;
@@ -43,8 +45,23 @@ fd_set			    fds;
 struct timeval		    tv;
 int			    r, fd = -1;
 unsigned int		    i, n_buffers;
-/* char		a	    *dev_name = "/dev/video0"; */
-static struct buffer		    *buffers;
+static struct buffer        *buffers;
+
+void set_user_setting(uint32_t id, int32_t value)
+{
+	/* Small wrapper function */
+	user_ctrl.id = id;
+	user_ctrl.value = value;
+	xioctl(fd, VIDIOC_S_CTRL, &user_ctrl);
+
+}
+
+void set_camera_setting(uint32_t id, int32_t value)
+{
+	cam_ctrl.id = id;
+	cam_ctrl.value = value;
+	xioctl(fd, VIDIOC_S_EXT_CTRLS, &cam_ctrl);
+}
 
 int init_everything(int width, int height, char *dev_name)
 {
@@ -57,7 +74,7 @@ int init_everything(int width, int height, char *dev_name)
 void init_mmap()
 {
 	CLEAR(v_request);
-	v_request.count = 2;
+	v_request.count = 4;
 	v_request.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 	v_request.memory = V4L2_MEMORY_MMAP;
 	xioctl(fd, VIDIOC_REQBUFS, &v_request);

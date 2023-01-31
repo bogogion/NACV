@@ -14,8 +14,10 @@
 #include <sys/time.h>
 #include <sys/types.h>
 
+/* Apriltag detector settings. */
 #define DECISION_THRESHOLD 70
-#define THREADS_NO 1
+#define THREADS_NO 4
+#define REFINE_EDGES 0
 
 #define WIDTH 640
 #define HEIGHT 480
@@ -37,7 +39,7 @@ int main()
 	int stride = generate_stride(WIDTH, 96);
 	image_u8_t *im = create_image_u8(WIDTH,HEIGHT,stride);
 	
-	int fd = init_everything(WIDTH,HEIGHT,"/dev/video0");
+	int fd = init_everything(WIDTH,HEIGHT,"/dev/video10");
 
 	start_stream(fd);
 
@@ -46,6 +48,8 @@ int main()
 	apriltag_detector_add_family(td,tf);
 	
 	td->nthreads = THREADS_NO;
+	td->refine_edges = REFINE_EDGES;
+
 
 	signal(SIGINT, intHandler);
 	apriltag_detection_t *det;
