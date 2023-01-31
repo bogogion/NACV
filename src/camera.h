@@ -7,27 +7,33 @@
 #include <apriltag/apriltag.h>
 #include <apriltag/common/image_u8.h>
 
-/* Ids for camera settings. Potentially different for each camera. These values are for the uvcvideo (usb) drivers.*/
-/* v4l2-ctl can be used to easily query the controls, or you could write code that does it for you ig. */
+/* User Control IDs. IDS are the same for each device if the device supports said setting. */
 
 /* User Controls */
 #define ID_BRIGHTNESS 		     0x00980900 
 #define ID_CONTRAST	 	     0x00980901	
 #define ID_SATURATION		     0x00980902
 #define ID_SHARPNESS		     0x0098091b
-#define ID_WHITE_BALANCE_AUTOMATIC   0x0098090c
-#define ID_WHITE_BALANCE_TEMPERATURE 0x00980918  /* Requires white_balance_automatic to be 0 */
+#define ID_POWERLINE		     0x00980918 /* Frequency threshold for the camera, can help with screen tearing */
+
+/* PI Controls */
+#define ID_RED_BALANCE		     0x0098090e
+#define ID_BLUE_BALANCE  	     0x0098090f
+#define ID_COLOR_EFFECTS 	     0x0098091f /* 1-15, see v4l2-ctl --all --device /dev/video0 for list of values */
+#define ID_COLOR_EFECTS_CBCR         0x0098092a
+
 
 /* Camera controls, VIDIOC_S_EXT_CTRLS call */
-/* Setting auto_exposure off is V4L2_EXPOSURE_MANUAL, on is V4L2_EXPOSURE_APERTURE_PRIORITY */
-#define ID_AUTO_EXPOSURE	     0x009a0901 /* Type is of enum. List of enums is found in hell. Good luck! */
+#define ID_AUTO_EXPOSURE	     0x009a0901 /* 0: Auto Mode, 1: Manual Mode*/
 #define ID_EXPOSURE_TIME 	     0x009a0902
-
-/* Add functionality for zoom and so on. Only included the useful ones*/
+#define ID_AUTO_EXPOSURE_BIAS        0x009a0903
+#define ID_WHITE_BALANCE_AUTO_PRESET 0x009a0914
+#define ID_IMAGE_STABILIZATION       0x009a0916
+#define ID_ISO_SENSITIVITY           0x009a0917 /* Menu 0-4 */
+#define ID_SCENE_MODE                0x009a091a /* Setting Presets */
 
 #define CLEAR(x) memset(&(x), 0, sizeof(x))
 
-/* There will be multiple of these */
 struct buffer {
 	void      *start;
 	size_t    length;
