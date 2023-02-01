@@ -134,7 +134,7 @@ zarray_t* get_detections(apriltag_detector_t *td, image_u8_t *im)
         v_buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
         v_buf.memory = V4L2_MEMORY_MMAP; */
         xioctl(fd, VIDIOC_DQBUF, &v_buf);
-	convert_rgb24_proper(640,480,im->stride,(uint8_t*)buffers[v_buf.index].start,im);
+	convert_rgb24_proper(CAMERA_WIDTH,CAMERA_HEIGHT,im->stride,(uint8_t*)buffers[v_buf.index].start,im);
 
 	zarray_t *detections = apriltag_detector_detect(td,im);
 	/* Requeue buffers */

@@ -22,7 +22,7 @@ void convert_rgb24_proper(int width, int height, int stride, uint8_t *inbuf, ima
 	/* FUCKING SERIOUS IMPORTANT! Currently this function only works with RGB24, if you change this format, you'll need a different conversion
 	 * (probably) */
 	
-	/* Conversion is (r + g + g +b)/4 */
+	/* Conversion is (r + g + b)/3 */
 	for(int y = 0; y < height; y++)
 	{
 		for(int x = 0; x < width; x++)
@@ -31,7 +31,7 @@ void convert_rgb24_proper(int width, int height, int stride, uint8_t *inbuf, ima
 			int g = inbuf[y*(width*3) + 3*x+1];
 			int b = inbuf[y*(width*3) + 3*x+2];
 
-			im->buf[y*stride + x] = ((r + g + g + b)/4);
+			im->buf[y*stride + x] = ((r + g + b)/3);
 		}
 	}
 }

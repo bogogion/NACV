@@ -19,9 +19,6 @@
 #define THREADS_NO 4
 #define REFINE_EDGES 0
 
-#define WIDTH 640
-#define HEIGHT 480
-
 int run = 1;
 
 
@@ -36,10 +33,10 @@ int main()
 	/* Timing */
 	time_t start,end;
 
-	int stride = generate_stride(WIDTH, 96);
-	image_u8_t *im = create_image_u8(WIDTH,HEIGHT,stride);
+	int stride = generate_stride(CAMERA_WIDTH, 96);
+	image_u8_t *im = create_image_u8(CAMERA_WIDTH,CAMERA_HEIGHT,stride);
 	
-	int fd = init_everything(WIDTH,HEIGHT,"/dev/video10");
+	int fd = init_everything(CAMERA_WIDTH,CAMERA_HEIGHT,"/dev/video10");
 
 	start_stream(fd);
 

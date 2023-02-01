@@ -1,5 +1,4 @@
 #include <apriltag/common/image_u8.h>
-#include <apriltag/common/pnm.h>
 #include <apriltag/common/math_util.h>
 #include <stdio.h>
 #include <stdlib.h>
