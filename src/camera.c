@@ -34,9 +34,8 @@ void xioctl(int fh, int request, void *arg)
 }
 
 /* Declare variables */
-/* Global for ease of use */
-struct v4l2_control         user_ctrl;
-struct v4l2_ext_control     cam_ctrl;
+struct v4l2_ext_control     single_ctrl;
+struct v4l2_ext_controls    cam_ctrl;
 struct v4l2_format	    format;
 struct v4l2_buffer	    v_buf;
 struct v4l2_requestbuffers  v_request;
@@ -46,20 +45,29 @@ struct timeval		    tv;
 int			    r, fd = -1;
 unsigned int		    i, n_buffers;
 static struct buffer        *buffers;
+/* 
+	ctrl_classes are defined in 
+	https://www.kernel.org/doc/html/v4.9/media/uapi/v4l/vidioc-g-ext-ctrls.html#vidioc-g-ext-ctrls
 
-void set_user_setting(uint32_t id, int32_t value)
+	controls is an array of v4l2_ext_control, each element is a single control. This helps when you want to assign multiple controls at once.
+	Common controls:
+	V4L2_CTRL_CLASS_USER: User settings
+	V4L2_CTRL_CLASS_CAMERA: Camera settings
+*/
+
+
+void set_camera_settings(uint32_t ctrl_class, uint32_t id, int32_t value)
 {
-	/* Small wrapper function */
-	user_ctrl.id = id;
-	user_ctrl.value = value;
-	xioctl(fd, VIDIOC_S_CTRL, &user_ctrl);
+	/* Ctrl handler */
+	cam_ctrl.ctrl_class = ctrl_class;
+	cam_ctrl.count = 1;
 
-}
+	/* Setting to be changed */
+	single_ctrl.id = id;
+	single_ctrl.value = value;
 
-void set_camera_setting(uint32_t id, int32_t value)
-{
-	cam_ctrl.id = id;
-	cam_ctrl.value = value;
+	cam_ctrl.controls = &single_ctrl;
+
 	xioctl(fd, VIDIOC_S_EXT_CTRLS, &cam_ctrl);
 }
 

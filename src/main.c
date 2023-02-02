@@ -30,9 +30,6 @@ void intHandler(int useless)
 
 int main()
 {
-	/* Timing */
-	time_t start,end;
-
 	int stride = generate_stride(CAMERA_WIDTH, 96);
 	image_u8_t *im = create_image_u8(CAMERA_WIDTH,CAMERA_HEIGHT,stride);
 	
@@ -69,8 +66,6 @@ int main()
 		}
 		zarray_destroy(detections);
 	}
-	printf("%f\n", (end - start));
-
 	close_cam(fd);
 
 	tag16h5_destroy(tf);
