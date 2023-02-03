@@ -18,6 +18,7 @@
 #define DECISION_THRESHOLD 70
 #define THREADS_NO 4
 #define REFINE_EDGES 0
+#define QUAD_DECIMATION 1
 
 int run = 1;
 
@@ -43,7 +44,7 @@ int main()
 	
 	td->nthreads = THREADS_NO;
 	td->refine_edges = REFINE_EDGES;
-
+	td->quad_decimate = QUAD_DECIMATION;
 
 	signal(SIGINT, intHandler);
 	apriltag_detection_t *det;
