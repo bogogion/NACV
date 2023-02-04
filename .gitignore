@@ -1,3 +1,6 @@
 *.a 
 *.o
+*.so
+*.so.*
 vgcore*
+test*
