@@ -6,19 +6,15 @@
 #include <apriltag/common/math_util.h>
 #include "processing.h"
 #include "camera.h"
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
-//#include "main.h"
 #include <unistd.h>
 #include <sys/time.h>
-#include <sys/types.h>
 
-/* Apriltag detector settings. */
 #define DECISION_THRESHOLD 70
-#define THREADS_NO 4
-#define REFINE_EDGES 0
-#define QUAD_DECIMATION .3
+/* Apriltag detector settings. */
 
 int run = 1;
 
@@ -41,12 +37,8 @@ int main()
 	apriltag_detector_t *td = apriltag_detector_create();
 	apriltag_family_t *tf = tag16h5_create();
 	apriltag_detector_add_family(td,tf);
-	
-	td->nthreads = THREADS_NO;
-	td->refine_edges = REFINE_EDGES;
-	td->quad_decimate = QUAD_DECIMATION;
 
-	set_settings_from_config("../cfg/test.camcfg");
+	set_settings_from_config("../cfg/test.camcfg",td);
 
 	signal(SIGINT, intHandler);
 	apriltag_detection_t *det;

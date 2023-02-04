@@ -1,5 +1,5 @@
 CC = gcc
-SRCS = main.* processing.* camera.*
+SRCS = main.* processing.* camera.* config.*
 LIB = -lapriltag -lm -lv4l2
 TARGET = detector_camera
 all: $(SRCS)
