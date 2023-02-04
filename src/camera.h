@@ -37,7 +37,12 @@
 #define ID_ISO_SENSITIVITY           0x009a0917 /* Menu 0-4 */
 #define ID_SCENE_MODE                0x009a091a /* Setting Presets */
 
+#define ID_CLASS_USER		     0x980000
+#define ID_CLASS_CAMERA		     0x9a0000
+
 #define CLEAR(x) memset(&(x), 0, sizeof(x))
+
+enum class_state{USER,CAMERA,DETECTOR};
 
 struct buffer {
 	void      *start;
@@ -45,6 +50,7 @@ struct buffer {
 };
 
 /* Ease of use function, used for safe v4l2_ calls */
+int set_settings_from_config(char *pathname); /* -1 for failure */
 void set_camera_settings(uint32_t ctrl_class, uint32_t id, int32_t value); /* EXT Call */
 void xioctl(int fh, int request, void *arg);
 zarray_t * get_detections(apriltag_detector_t *td,image_u8_t *im); /* Reminder; make sure to free the zarray_t generated*/

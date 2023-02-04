@@ -18,7 +18,7 @@
 #define DECISION_THRESHOLD 70
 #define THREADS_NO 4
 #define REFINE_EDGES 0
-#define QUAD_DECIMATION 1
+#define QUAD_DECIMATION .3
 
 int run = 1;
 
@@ -34,7 +34,7 @@ int main()
 	int stride = generate_stride(CAMERA_WIDTH, 96);
 	image_u8_t *im = create_image_u8(CAMERA_WIDTH,CAMERA_HEIGHT,stride);
 	
-	int fd = init_everything(CAMERA_WIDTH,CAMERA_HEIGHT,"/dev/video10");
+	int fd = init_everything(CAMERA_WIDTH,CAMERA_HEIGHT,"/dev/video0");
 
 	start_stream(fd);
 
@@ -45,6 +45,8 @@ int main()
 	td->nthreads = THREADS_NO;
 	td->refine_edges = REFINE_EDGES;
 	td->quad_decimate = QUAD_DECIMATION;
+
+	set_settings_from_config("../cfg/test.camcfg");
 
 	signal(SIGINT, intHandler);
 	apriltag_detection_t *det;
