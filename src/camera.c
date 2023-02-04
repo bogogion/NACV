@@ -10,10 +10,12 @@
 #include <sys/time.h>
 #include <sys/mman.h>
 #include <linux/videodev2.h>
+
 /* Tag detection*/
 #include <apriltag/apriltag.h>
 #include <apriltag/tag16h5.h>
 #include <apriltag/common/zarray.h>
+
 /* Neccessary camera code */
 #include "../lib/libv4l/include/libv4l2.h"
 #include "camera.h"
@@ -63,7 +65,7 @@ void set_camera_settings(uint32_t ctrl_class, uint32_t id, int32_t value)
 
 int init_everything(int width, int height, char *dev_name)
 {
-	int fd = init_cam("/dev/video0",width,height);
+	int fd = init_cam(dev_name,width,height);
 	init_mmap();
 	return fd;
 }
@@ -128,13 +130,11 @@ zarray_t* get_detections(apriltag_detector_t *td, image_u8_t *im)
 	       return errno;
         }
 
-        /* CLEAR(v_buf);
-        v_buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-        v_buf.memory = V4L2_MEMORY_MMAP; */
         xioctl(fd, VIDIOC_DQBUF, &v_buf);
 	convert_rgb24_proper(CAMERA_WIDTH,CAMERA_HEIGHT,im->stride,(uint8_t*)buffers[v_buf.index].start,im);
 
 	zarray_t *detections = apriltag_detector_detect(td,im);
+	
 	/* Requeue buffers */
 	xioctl(fd, VIDIOC_QBUF, &v_buf);
 	return detections;

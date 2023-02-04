@@ -7,9 +7,9 @@
 void set_settings_from_config(char *pathname, apriltag_detector_t *td)
 {
 	char buf[255];
-	FILE *fp;
 	char temp_token[255];
 	char temp_value[255];
+	
 	unsigned int class_mode; /* 1 for class read, 0 for non class read */
 	unsigned int value_mode; /* 1 for value read, 0 for non value read */
 	unsigned int t_pos = 0;
@@ -17,6 +17,7 @@ void set_settings_from_config(char *pathname, apriltag_detector_t *td)
 
 	enum class_state cstate;
 
+	FILE *fp;
 	fp = fopen(pathname,"r");
 
 	while(fgets(buf,255,fp) != NULL)

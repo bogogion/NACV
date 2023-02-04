@@ -16,12 +16,10 @@ int generate_stride(int width, unsigned int alignment)
 	return width;
 }
 
-/* Chaos. Remember kids, use ppm for safe rgb24 to rgb8/grey conversion! */
 void convert_rgb24_proper(int width, int height, int stride, uint8_t *inbuf, image_u8_t *im)
 {
-	/* FUCKING SERIOUS IMPORTANT! Currently this function only works with RGB24, if you change this format, you'll need a different conversion
-	 * (probably) */
-	
+	/* Conversion, to my knowledge, is only applicable to 3-byte RGB format, such as RGB3 (rgb24)*/
+
 	/* Conversion is (r + g + b)/3 */
 	for(int y = 0; y < height; y++)
 	{

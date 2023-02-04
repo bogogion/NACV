@@ -14,10 +14,8 @@
 #include <sys/time.h>
 
 #define DECISION_THRESHOLD 70
-/* Apriltag detector settings. */
 
 int run = 1;
-
 
 /* Handles Ctrl + C end of loop */
 void intHandler(int useless)
