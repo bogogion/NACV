@@ -63,9 +63,9 @@ void set_camera_settings(uint32_t ctrl_class, uint32_t id, int32_t value)
 	xioctl(fd, VIDIOC_S_EXT_CTRLS, &cam_ctrl);
 }
 
-int init_everything(int width, int height, char *dev_name)
+int init_everything(int width, int height)
 {
-	int fd = init_cam(dev_name,width,height);
+	int fd = init_cam("/dev/video0",width,height);
 	init_mmap();
 	return fd;
 }

@@ -28,7 +28,8 @@ int main()
 	int stride = generate_stride(CAMERA_WIDTH, 96);
 	image_u8_t *im = create_image_u8(CAMERA_WIDTH,CAMERA_HEIGHT,stride);
 	
-	int fd = init_everything(CAMERA_WIDTH,CAMERA_HEIGHT,"/dev/video0");
+	/* Default camera device is video0*/
+	int fd = init_everything(CAMERA_WIDTH,CAMERA_HEIGHT);
 
 	start_stream(fd);
 
@@ -36,6 +37,7 @@ int main()
 	apriltag_family_t *tf = tag16h5_create();
 	apriltag_detector_add_family(td,tf);
 
+	/* TODO: have default set location for camera setting! */
 	set_settings_from_config("../cfg/test.camcfg",td);
 
 	signal(SIGINT, intHandler);
