@@ -50,6 +50,7 @@ struct buffer {
 };
 
 /* Ease of use function, used for safe v4l2_ calls */
+void test_input(image_u8_t *im);
 void set_camera_settings(uint32_t ctrl_class, uint32_t id, int32_t value); /* EXT Call */
 void xioctl(int fh, int request, void *arg);
 zarray_t * get_detections(apriltag_detector_t *td,image_u8_t *im); /* Reminder; make sure to free the zarray_t generated*/

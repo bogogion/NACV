@@ -42,6 +42,12 @@ int main()
 
 	signal(SIGINT, intHandler);
 	apriltag_detection_t *det;
+
+	/* while(run)
+	{
+		test_input(im);
+	} */
+
 	while(run)
 	{
 		zarray_t* detections = get_detections(td,im);

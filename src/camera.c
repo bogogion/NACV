@@ -140,6 +140,36 @@ zarray_t* get_detections(apriltag_detector_t *td, image_u8_t *im)
 	return detections;
 }
 
+/* Tests the speed of the camera */
+
+void test_input(image_u8_t *im)
+{
+	do {
+               	FD_ZERO(&fds);
+               	FD_SET(fd, &fds);
+		 
+                /* Timeout. */
+             	tv.tv_sec = 2;
+		tv.tv_usec = 0;
+
+               	r = select(fd + 1, &fds, NULL, NULL, &tv);
+        } while ((r == -1 && (errno = EINTR)));
+        if (r == -1) {
+               perror("select");
+	       return errno;
+        }
+
+	xioctl(fd, VIDIOC_DQBUF, &v_buf);
+	
+	/* Uncomment for testing with rgb conv. */
+	// convert_rgb24_proper(CAMERA_WIDTH,CAMERA_HEIGHT,im->stride,(uint8_t*)buffers[v_buf.index].start,im);
+	
+	printf("IN: %i\n",v_buf.index);
+
+	xioctl(fd, VIDIOC_QBUF, &v_buf);
+
+}
+
 void set_cam_settings(int width, int height, int pformat)
 {
 	format.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
