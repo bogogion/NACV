@@ -47,6 +47,7 @@ struct timeval		    tv;
 int			    r, fd = -1;
 unsigned int		    i, n_buffers;
 static struct buffer        *buffers;
+char 			    out_name[255];
 
 void set_camera_settings(uint32_t ctrl_class, uint32_t id, int32_t value)
 {
@@ -162,10 +163,15 @@ void test_input(image_u8_t *im)
 	xioctl(fd, VIDIOC_DQBUF, &v_buf);
 	
 	/* Uncomment for testing with rgb conv. */
-	// convert_rgb24_proper(CAMERA_WIDTH,CAMERA_HEIGHT,im->stride,(uint8_t*)buffers[v_buf.index].start,im);
-	
-	printf("IN: %i\n",v_buf.index);
+	convert_rgb24_proper(CAMERA_WIDTH,CAMERA_HEIGHT,im->stride,(uint8_t*)buffers[v_buf.index].start,im);
+	sprintf(out_name,"out_t.pgm");
+	FILE *fout;
+	fout = fopen(out_name, "w");
 
+	fprintf(fout,"P5\n640 480 \n255\n");
+	int stride = generate_stride(CAMERA_WIDTH,96);
+	fwrite(im->buf,CAMERA_HEIGHT*stride,1,fout);
+	fclose(fout);
 	xioctl(fd, VIDIOC_QBUF, &v_buf);
 
 }
