@@ -29,7 +29,7 @@ void convert_rgb24_proper(int width, int height, int stride, uint8_t *inbuf, ima
 			int g = inbuf[y*(width*3) + 3*x+1];
 			int b = inbuf[y*(width*3) + 3*x+2];
 
-			im->buf[y*stride + x] = ((r + g + b)/3);
+			im->buf[y*stride + x] = ((r + g + g + b)/4);
 		}
 	}
 }

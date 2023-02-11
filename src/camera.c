@@ -163,14 +163,14 @@ void test_input(image_u8_t *im)
 	xioctl(fd, VIDIOC_DQBUF, &v_buf);
 	
 	/* Uncomment for testing with rgb conv. */
-	convert_rgb24_proper(CAMERA_WIDTH,CAMERA_HEIGHT,im->stride,(uint8_t*)buffers[v_buf.index].start,im);
-	sprintf(out_name,"out_t.pgm");
+	//convert_rgb24_proper(CAMERA_WIDTH,CAMERA_HEIGHT,im->stride,(uint8_t*)buffers[v_buf.index].start,im);
+	sprintf(out_name,"out_t.ppm");
 	FILE *fout;
 	fout = fopen(out_name, "w");
 
-	fprintf(fout,"P5\n640 480 \n255\n");
+	fprintf(fout,"P6\n640 480 \n255\n");
 	int stride = generate_stride(CAMERA_WIDTH,96);
-	fwrite(im->buf,CAMERA_HEIGHT*stride,1,fout);
+	fwrite(buffers[v_buf.index].start,v_buf.bytesused,1,fout);
 	fclose(fout);
 	xioctl(fd, VIDIOC_QBUF, &v_buf);
 

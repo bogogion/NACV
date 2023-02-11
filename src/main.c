@@ -7,6 +7,7 @@
 #include "processing.h"
 #include "camera.h"
 #include "config.h"
+#include "math/d_math.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
@@ -59,6 +60,8 @@ int main()
 				if(det->decision_margin > DECISION_THRESHOLD && det->id >= 4 && det->id <= 6)
 				{
 					printf("FOUND! ID: %i D_M: %f\n",det->id, det->decision_margin);
+					printf("AREA: %li\n",det->p);
+					//printf("DIST: %i \n",m_grab_dist_in_pixels(det->p,131,130,431,85));
 				}
 			}
 		
