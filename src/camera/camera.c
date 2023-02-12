@@ -17,7 +17,7 @@
 #include <apriltag/common/zarray.h>
 
 /* Neccessary camera code */
-#include "../lib/libv4l/include/libv4l2.h"
+#include "../../lib/libv4l/include/libv4l2.h"
 #include "camera.h"
 #include "processing.h"
 
@@ -128,21 +128,20 @@ zarray_t* get_detections(apriltag_detector_t *td, image_u8_t *im)
         } while ((r == -1 && (errno = EINTR)));
         if (r == -1) {
                perror("select");
-	       return errno;
+	       return NULL;
         }
 
         xioctl(fd, VIDIOC_DQBUF, &v_buf);
 	convert_rgb24_proper(CAMERA_WIDTH,CAMERA_HEIGHT,im->stride,(uint8_t*)buffers[v_buf.index].start,im);
 
 	zarray_t *detections = apriltag_detector_detect(td,im);
-	
+
 	/* Requeue buffers */
 	xioctl(fd, VIDIOC_QBUF, &v_buf);
 	return detections;
 }
 
-/* Tests the speed of the camera */
-
+/* Grabs test frame */
 void test_input(image_u8_t *im)
 {
 	do {
@@ -157,7 +156,6 @@ void test_input(image_u8_t *im)
         } while ((r == -1 && (errno = EINTR)));
         if (r == -1) {
                perror("select");
-	       return errno;
         }
 
 	xioctl(fd, VIDIOC_DQBUF, &v_buf);
@@ -173,7 +171,6 @@ void test_input(image_u8_t *im)
 	fwrite(buffers[v_buf.index].start,v_buf.bytesused,1,fout);
 	fclose(fout);
 	xioctl(fd, VIDIOC_QBUF, &v_buf);
-
 }
 
 void set_cam_settings(int width, int height, int pformat)

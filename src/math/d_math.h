@@ -3,13 +3,10 @@
 /* Data from calibration */
 struct calibration_data
 {
-	/* Lenght in pixels of the left side and right side */
-	int l_length;
-	int r_length;
-	
-	/* In inches */
-	int distance;
+	/* Constants */
+	float constant;
+	float fov_radians; /* Fov angle to radians */
 };
-
+float grab_angle(float dt, int x, struct calibration_data *cdata);
+int grab_area(double p[4][2]);
 int grab_distance(double p[4][2], struct calibration_data *cdata);
-int check_angle(int cur_l_length, int cur_r_length);

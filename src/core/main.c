@@ -2,19 +2,17 @@
 #include <apriltag/apriltag.h>
 #include <apriltag/tag16h5.h>
 #include <apriltag/common/image_u8.h>
-#include <apriltag/common/matd.h>
-#include <apriltag/common/math_util.h>
-#include "processing.h"
-#include "camera.h"
-#include "config.h"
-#include "math/d_math.h"
+#include "../camera/processing.h"
+#include "../camera/camera.h"
+#include "../camera/config.h"
+#include "../math/d_math.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
 #include <sys/time.h>
 
-#define DECISION_THRESHOLD 70
+#define DECISION_THRESHOLD 40
 
 int run = 1;
 
@@ -26,10 +24,15 @@ void intHandler(int useless)
 
 int main()
 {
+	/* Set calibration data */	
+	struct calibration_data cdata;
+	cdata.constant = 3725.19;
+	cdata.fov_radians = 0.9337511;
+
 	int stride = generate_stride(CAMERA_WIDTH, 96);
 	image_u8_t *im = create_image_u8(CAMERA_WIDTH,CAMERA_HEIGHT,stride);
 	
-	/* Default camera device is video0*/
+	/* Default camera device is video0 */
 	int fd = init_everything(CAMERA_WIDTH,CAMERA_HEIGHT);
 
 	start_stream(fd);
@@ -41,16 +44,13 @@ int main()
 	/* TODO: have default set location for camera setting! */
 	set_settings_from_config("../cfg/test.camcfg",td);
 
+	/* Handles Ctrl + C end of loop */
 	signal(SIGINT, intHandler);
 	apriltag_detection_t *det;
-
-
-	test_input(im);
 
 	while(run)
 	{
 		zarray_t* detections = get_detections(td,im);
-
 		if(zarray_size(detections) != 0)
 		{
 			for(int i = 0; i < zarray_size(detections); i++)
@@ -60,8 +60,8 @@ int main()
 				if(det->decision_margin > DECISION_THRESHOLD && det->id >= 4 && det->id <= 6)
 				{
 					printf("FOUND! ID: %i D_M: %f\n",det->id, det->decision_margin);
-					printf("AREA: %li\n",det->p);
-					//printf("DIST: %i \n",m_grab_dist_in_pixels(det->p,131,130,431,85));
+					printf("C: X%f Y%f \n",det->c[0],det->c[1]);
+					printf("AREA: %i\n",grab_area(det->p));
 				}
 			}
 		
