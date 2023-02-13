@@ -10,7 +10,6 @@ For all information (as I add it)
 [Wiki](https://github.com/bogogion/frc-2023-cv/wiki)
 
 ## Current Todo:
-- Remake Camera code to be cleaner and optimized.
 - Write complete documentation on camera code for further maintence.
 - Write code to communicate with the Java code (either analog pins or networking).
 - Write conditions and math for detections.
