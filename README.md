@@ -18,6 +18,10 @@ For all information (as I add it)
 - Improve performance and tune detector for best detections.
 
 ## System Diagram
+* Code
+    * /src/core = main file and test/debug files
+    * /src/camera = camera code, processing code, and config for camera
+    * /src/math = math for detections
 * Rasberry PI
     * Computer Vision code, written in C.
     * Possible Image replaying (replication to other remote clients, ie. a controller)
