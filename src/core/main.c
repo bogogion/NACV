@@ -16,6 +16,7 @@
 #define DECISION_THRESHOLD 70
 
 int run = 1;
+int debug = 0;
 
 /* Handles Ctrl + C end of loop */
 void intHandler(int useless)
@@ -23,10 +24,20 @@ void intHandler(int useless)
 	run = 0;	
 }
 
-int main()
+int main(int argc, char *argv[])
 {
 	pthread_t thread;
 	int iret1;
+
+	/* Arg -d is debug */
+	if(argc == 2)
+	{
+		if(0 == strcmp("-d",argv[1]))
+		{
+			debug = 1;
+		}
+	}
+
 
 	/* Set calibration data */	
 	struct calibration_data cdata;
@@ -54,6 +65,14 @@ int main()
 	/* Handles Ctrl + C end of loop */
 	signal(SIGINT, intHandler);
 	apriltag_detection_t *det;
+
+	if(debug)
+	{
+		/* Prints out test images */
+		run = 0;
+		td->debug = 1;
+		get_detections(td,im);
+	}
 
 	while(run)
 	{
