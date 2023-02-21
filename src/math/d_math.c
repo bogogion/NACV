@@ -24,7 +24,7 @@ float grab_angle(float dt, int x, struct calibration_data *cdata)
 	return angle_to_target;
 }
 
-int grab_distance(double p[4][2], struct calibration_data *cdata)
+float grab_distance(double p[4][2], struct calibration_data *cdata)
 {
 	int area = ((p[0][0]*p[1][1])-(p[1][0]*p[0][1])) + ((p[1][0]*p[2][1])-(p[2][0]*p[1][1]))
 		   + ((p[2][0]*p[3][1])-(p[3][0]*p[2][1])) + ((p[3][0]*p[0][1])-(p[0][0]*p[3][1]));

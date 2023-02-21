@@ -6,13 +6,14 @@
 #include "../camera/camera.h"
 #include "../camera/config.h"
 #include "../math/d_math.h"
+#include "../server/server_client.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
 #include <sys/time.h>
-
-#define DECISION_THRESHOLD 40
+#include <pthread.h>
+#define DECISION_THRESHOLD 70
 
 int run = 1;
 
@@ -24,6 +25,9 @@ void intHandler(int useless)
 
 int main()
 {
+	pthread_t thread;
+	int iret1;
+
 	/* Set calibration data */	
 	struct calibration_data cdata;
 	cdata.constant = 3725.19;
@@ -34,6 +38,9 @@ int main()
 	
 	/* Default camera device is video0 */
 	int fd = init_everything(CAMERA_WIDTH,CAMERA_HEIGHT);
+
+	/* Start server */
+	iret1 = pthread_create(&thread,NULL,thread_function,NULL);
 
 	start_stream(fd);
 
@@ -57,11 +64,14 @@ int main()
 			{
 				zarray_get(detections, i, &det);
 
-				if(det->decision_margin > DECISION_THRESHOLD && det->id >= 4 && det->id <= 6)
+				if(det->decision_margin > DECISION_THRESHOLD && det->id >= 1 && det->id <= 8)
 				{
 					printf("FOUND! ID: %i D_M: %f\n",det->id, det->decision_margin);
 					printf("C: X%f Y%f \n",det->c[0],det->c[1]);
 					printf("AREA: %i\n",grab_area(det->p));
+					float dist = grab_distance(det->p,&cdata);
+					update_packet(det->id,dist,grab_angle(dist,det->c[0],&cdata));
+				
 				}
 			}
 		

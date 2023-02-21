@@ -9,4 +9,4 @@ struct calibration_data
 };
 float grab_angle(float dt, int x, struct calibration_data *cdata);
 int grab_area(double p[4][2]);
-int grab_distance(double p[4][2], struct calibration_data *cdata);
+float grab_distance(double p[4][2], struct calibration_data *cdata);
