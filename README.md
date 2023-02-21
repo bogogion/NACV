@@ -19,6 +19,7 @@ For all information (as I add it)
     * /src/core = main file and test/debug files
     * /src/camera = camera code, processing code, and config for camera
     * /src/math = math for detections
+    * /src/server = server code
 * Rasberry PI
     * Computer Vision code, written in C.
     * Possible Image replaying (replication to other remote clients, ie. a controller)
