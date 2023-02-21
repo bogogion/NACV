@@ -11,11 +11,8 @@ For all information (as I add it)
 
 ## Current Todo:
 - Write complete documentation on camera code for further maintence.
-- Write code to communicate with the Java code (either analog pins or networking).
-- Write conditions and math for detections.
 - Test.
 - Figure out mounting on robot.
-- Improve performance and tune detector for best detections.
 
 ## System Diagram
 * Code
