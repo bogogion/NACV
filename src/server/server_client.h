@@ -4,8 +4,8 @@
 #define MAX_MES_SIZE 9
 
 /* These macros affect everything, make sure to change these if you need to change port/ip */
-#define PORT 3824
-#define C_PORT 3825
+#define PORT 5805
+#define C_PORT 5805
 #define IP "127.0.0.1"
 #define C_IP "127.0.0.1"
 

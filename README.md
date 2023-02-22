@@ -13,6 +13,7 @@ For all information (as I add it)
 - Write complete documentation on camera code for further maintence.
 - Test.
 - Figure out mounting on robot.
+- Fix angle math function
 
 ## System Diagram
 * Code
