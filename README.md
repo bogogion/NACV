@@ -1,4 +1,4 @@
-# Native AprilTag Vision System written in C
+# Native AprilTag Vision system written in C
 
 ## For use by FRC team 3824 (HVA), but code is avaiable for any other teams
 
