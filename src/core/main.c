@@ -26,9 +26,6 @@ void intHandler(int useless)
 
 int main(int argc, char *argv[])
 {
-	pthread_t thread;
-	int iret1;
-
 	/* Arg -d is debug */
 	if(argc == 2)
 	{
@@ -44,6 +41,7 @@ int main(int argc, char *argv[])
 	cdata.constant = 3725.19;
 	cdata.fov_radians = 0.9337511;
 
+	/* Create image_u8 struct */
 	int stride = generate_stride(CAMERA_WIDTH, 96);
 	image_u8_t *im = create_image_u8(CAMERA_WIDTH,CAMERA_HEIGHT,stride);
 	
@@ -51,6 +49,8 @@ int main(int argc, char *argv[])
 	int fd = init_everything(CAMERA_WIDTH,CAMERA_HEIGHT);
 
 	/* Start server */
+	pthread_t thread;
+	int iret1;
 	iret1 = pthread_create(&thread,NULL,thread_function,NULL);
 
 	start_stream(fd);
@@ -85,11 +85,8 @@ int main(int argc, char *argv[])
 
 				if(det->decision_margin > DECISION_THRESHOLD && det->id >= 1 && det->id <= 8)
 				{
-					printf("FOUND! ID: %i D_M: %f\n",det->id, det->decision_margin);
-					printf("C: X%f Y%f \n",det->c[0],det->c[1]);
-					printf("AREA: %i\n",grab_area(det->p));
 					float dist = grab_distance(det->p,&cdata);
-					update_packet(det->id,dist,grab_angle(dist,det->c[0],&cdata));
+					update_packet(det->id,dist,grab_angle(det->p));
 				
 				}
 			}

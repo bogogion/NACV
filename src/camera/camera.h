@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "../../lib/libv4l/include/libv4l2.h"
 
-/* These variables */
 #define CAMERA_WIDTH    640
 #define CAMERA_HEIGHT   480
 

@@ -7,6 +7,6 @@ struct calibration_data
 	float constant;
 	float fov_radians; /* Fov angle to radians */
 };
-float grab_angle(float dt, int x, struct calibration_data *cdata);
+float grab_angle(double p[4][2]);
 int grab_area(double p[4][2]);
 float grab_distance(double p[4][2], struct calibration_data *cdata);

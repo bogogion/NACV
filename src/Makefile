@@ -1,7 +1,7 @@
 CC = gcc
 SRCS = core/* camera/* math/* server/*
 LIB = -lapriltag -lm -lv4l2
-TARGET = detector_camera
+TARGET = nacv
 all: $(SRCS)
 	$(CC) $(SRCS) $(LIB) -o $(TARGET)
 install: $(TARGET)

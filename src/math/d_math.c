@@ -1,27 +1,22 @@
 #include "d_math.h"
 #include <math.h>
+#include "../camera/camera.h"
 
 /* x = center x 
  * dt = distance
  * */
 
-float grab_angle(float dt, int x, struct calibration_data *cdata)
+float grab_angle(double p[4][2])
 {
-	/* c_ camera variable */
-	
-	double c_fov_distance;
-	double angle_to_target;
-	double c_distance_to_target;
+	float dx,dy;
+	dx = p[1][0]-p[0][0];
+	dy = p[0][1]-p[3][1];
 
-	/* distance to point * tan(radians/2)*/
-	c_fov_distance = dt * tan(cdata->fov_radians/2);
-	/* 320 = half of width, TODO: change this to WIDTH/2 */
-        c_distance_to_target = (x/320)*c_fov_distance;
+	/* -45 is the constant */
+	float angle_to_target = (((atan(dx/dy))/3.12)*180)-45.0;
+	printf("%f \n",angle_to_target);
+	if(angle_to_target<0){return (angle_to_target*-1);}
 	
-	angle_to_target = atan(c_fov_distance/dt);
-
-	/* Convert radians to angle */
-	angle_to_target = (angle_to_target/3.12)*180;
 	return angle_to_target;
 }
 
@@ -40,6 +35,7 @@ float grab_distance(double p[4][2], struct calibration_data *cdata)
 	return (cdata->constant * pow(area,-.5));
 }
 
+/* debug function */
 int grab_area(double p[4][2])
 {	
 	int area = ((p[0][0]*p[1][1])-(p[1][0]*p[0][1])) + ((p[1][0]*p[2][1])-(p[2][0]*p[1][1]))
