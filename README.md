@@ -2,7 +2,7 @@
 
 ## For use by FRC team 3824 (HVA), but code is avaiable for any other teams
 
-# MAJOR: This repo is currently a WIP parts of this readme may be inaccurate for the time being!
+## MAJOR: This repo is currently a WIP parts of this readme may be inaccurate for the time being!
 
 ## Info
 Camera input and processing handled by v4l2 (Video for Linux 2).
