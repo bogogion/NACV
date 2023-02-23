@@ -1,4 +1,6 @@
-# Computer Vision module written in C for the HVA-FRC-3824 Robotics Team
+# Native AprilTag Vision System written in C
+
+## For use by FRC team 3824 (HVA), but code is avaiable for any other teams
 
 # MAJOR: This repo is currently a WIP parts of this readme may be inaccurate for the time being!
 
