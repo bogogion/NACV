@@ -15,7 +15,8 @@ float grab_angle(float dt, int x, struct calibration_data *cdata)
 
 	/* distance to point * tan(radians/2)*/
 	c_fov_distance = dt * tan(cdata->fov_radians/2);
-	c_distance_to_target = (x/320)*c_fov_distance;
+	/* 320 = half of width, TODO: change this to WIDTH/2 */
+        c_distance_to_target = (x/320)*c_fov_distance;
 	
 	angle_to_target = atan(c_fov_distance/dt);
 
