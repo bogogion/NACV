@@ -5,3 +5,4 @@
 *.so.*
 vgcore*
 test*
+detector_camera
