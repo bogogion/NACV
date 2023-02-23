@@ -5,4 +5,4 @@ TARGET = nacv
 all: $(SRCS)
 	$(CC) $(SRCS) $(LIB) -o $(TARGET)
 install: $(TARGET)
-	sudo cp $(TARGET) /usr/bin/
+	sudo cp $(TARGET) /usr/bin/ && mkdir ~/.config/NACV && cp ../cfg/test.camcfg ~/.config/NACV/cam.camcfg

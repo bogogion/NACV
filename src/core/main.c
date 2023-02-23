@@ -59,8 +59,14 @@ int main(int argc, char *argv[])
 	apriltag_family_t *tf = tag16h5_create();
 	apriltag_detector_add_family(td,tf);
 
-	/* TODO: have default set location for camera setting! */
-	set_settings_from_config("../cfg/test.camcfg",td);
+	char *file;
+	char *location = "/.config/NACV/cam.camcfg";
+	
+	file = malloc(strlen(getenv("HOME") + strlen(location) + 1));
+	strcpy(file,getenv("HOME"));
+	strcat(file,location);
+	
+	set_settings_from_config(file,td);
 
 	/* Handles Ctrl + C end of loop */
 	signal(SIGINT, intHandler);
