@@ -16,6 +16,7 @@ For all information (as I add it)
 - Test.
 - Figure out mounting on robot.
 - Fix angle math function
+- Add config for height/width/decision threshold
 
 ## Quick Use
 `nacv` to run the program
