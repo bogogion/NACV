@@ -17,6 +17,13 @@ For all information (as I add it)
 - Figure out mounting on robot.
 - Fix angle math function
 
+## Quick Use
+`nacv` to run the program
+
+`nacv -d` for debug images in working directory
+
+By default the Pi will send packets from port 5805 (frc compatible)
+
 ## Troubleshooting
 - `XIOCTL_CALL: Bad file descriptor` means your camera is not plugged in or it is under a different device name, run `ls /dev/ | grep "video"` to find
 the correct device. (its often `video0`)
