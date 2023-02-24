@@ -20,16 +20,19 @@ void convert_rgb24_proper(int width, int height, int stride, uint8_t *inbuf, ima
 {
 	/* Conversion, to my knowledge, is only applicable to 3-byte RGB format, such as RGB3 (rgb24)*/
 
+	register int y;
+	register int x;
+
 	/* Conversion is (r + g + b)/3 */
-	for(int y = 0; y < height; y++)
+	for(y = 0; y < height; y++)
 	{
-		for(int x = 0; x < width; x++)
+		for(x = 0; x < width; x++)
 		{
 			int r = inbuf[y*(width*3) + 3*x+0];
 			int g = inbuf[y*(width*3) + 3*x+1];
 			int b = inbuf[y*(width*3) + 3*x+2];
 
-			im->buf[y*stride + x] = ((r + g + g + b)/4);
+			im->buf[y*stride + x] = ((r + g + b)/3);
 		}
 	}
 }

@@ -50,14 +50,6 @@ unsigned int		    i, n_buffers;
 static struct buffer        *buffers;
 char 			    out_name[255];
 
-void set_user_setting(uint32_t id, int32_t value)
-{
-	user_ctrl.id = id;
-	user_ctrl.value = value;
-
-	xioctl(fd, VIDIOC_S_CTRL, &user_ctrl);
-}
-
 void set_camera_settings(uint32_t ctrl_class, uint32_t id, int32_t value)
 {
 	/* Ctrl handler */
@@ -148,38 +140,6 @@ zarray_t* get_detections(apriltag_detector_t *td, image_u8_t *im)
 	/* Requeue buffers */
 	xioctl(fd, VIDIOC_QBUF, &v_buf);
 	return detections;
-}
-
-/* Grabs test frame */
-void test_input(image_u8_t *im)
-{
-	do {
-               	FD_ZERO(&fds);
-               	FD_SET(fd, &fds);
-		 
-                /* Timeout. */
-             	tv.tv_sec = 2;
-		tv.tv_usec = 0;
-
-               	r = select(fd + 1, &fds, NULL, NULL, &tv);
-        } while ((r == -1 && (errno = EINTR)));
-        if (r == -1) {
-               perror("select");
-        }
-
-	xioctl(fd, VIDIOC_DQBUF, &v_buf);
-	
-	/* Uncomment for testing with rgb conv. */
-	//convert_rgb24_proper(CAMERA_WIDTH,CAMERA_HEIGHT,im->stride,(uint8_t*)buffers[v_buf.index].start,im);
-	sprintf(out_name,"out_t.ppm");
-	FILE *fout;
-	fout = fopen(out_name, "w");
-
-	fprintf(fout,"P6\n640 480 \n255\n");
-	int stride = generate_stride(CAMERA_WIDTH,96);
-	fwrite(buffers[v_buf.index].start,v_buf.bytesused,1,fout);
-	fclose(fout);
-	xioctl(fd, VIDIOC_QBUF, &v_buf);
 }
 
 void set_cam_settings(int width, int height, int pformat)

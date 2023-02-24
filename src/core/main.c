@@ -26,15 +26,17 @@ void intHandler(int useless)
 
 int main(int argc, char *argv[])
 {
-	/* Arg -d is debug */
-	if(argc == 2)
+	/* Get arguments */
+	int opt;
+	while((opt = getopt(argc,argv,"d")) != -1)
 	{
-		if(0 == strcmp("-d",argv[1]))
+		switch(opt)
 		{
-			debug = 1;
+			case 'd': debug = 1;
+			default: printf("Usage: nacv [-d]\n");
 		}
+	
 	}
-
 
 	/* Set calibration data */	
 	struct calibration_data cdata;
