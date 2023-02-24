@@ -93,8 +93,10 @@ void set_settings_from_config(char *pathname, apriltag_detector_t *td)
 						case USER:
 							id = (int)strtol(temp_token,NULL,16);
 							value = atoi(temp_value);
+							
+							printf("%X %i\n",id,value);
+							
 							set_camera_settings(ID_CLASS_USER,id,value);
-
 							CLEAR(temp_token);
 							CLEAR(temp_value);
 

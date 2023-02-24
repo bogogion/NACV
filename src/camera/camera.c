@@ -36,6 +36,7 @@ void xioctl(int fh, int request, void *arg)
 }
 
 /* Declare variables */
+struct v4l2_control         user_ctrl;
 struct v4l2_ext_control     single_ctrl;
 struct v4l2_ext_controls    cam_ctrl;
 struct v4l2_format	    format;
@@ -48,6 +49,14 @@ int			    r, fd = -1;
 unsigned int		    i, n_buffers;
 static struct buffer        *buffers;
 char 			    out_name[255];
+
+void set_user_setting(uint32_t id, int32_t value)
+{
+	user_ctrl.id = id;
+	user_ctrl.value = value;
+
+	xioctl(fd, VIDIOC_S_CTRL, &user_ctrl);
+}
 
 void set_camera_settings(uint32_t ctrl_class, uint32_t id, int32_t value)
 {
