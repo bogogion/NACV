@@ -49,3 +49,9 @@ image_u8_t* create_image_u8(int width, int height, int stride)
 	memcpy(im, &tmp, sizeof(image_u8_t));
 	return im;
 }
+
+void destroy_image_u8(image_u8_t *im)
+{
+	free(im->buf);
+	free(im);
+}

@@ -70,6 +70,8 @@ int main(int argc, char *argv[])
 	
 	set_settings_from_config(file,td);
 
+	free(file);
+
 	/* Handles Ctrl + C end of loop */
 	signal(SIGINT, intHandler);
 	apriltag_detection_t *det;
@@ -102,6 +104,9 @@ int main(int argc, char *argv[])
 		}
 		zarray_destroy(detections);
 	}
+	pthread_cancel(thread);
+	destroy_image_u8(im);
+
 	close_cam(fd);
 
 	tag16h5_destroy(tf);
