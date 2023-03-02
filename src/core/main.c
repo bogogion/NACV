@@ -18,6 +18,7 @@
 int run = 1;
 int debug = 0;
 
+enum buf_types BUF_TYPE;
 /* Handles Ctrl + C end of loop */
 void intHandler(int useless)
 {
@@ -26,14 +27,17 @@ void intHandler(int useless)
 
 int main(int argc, char *argv[])
 {
+	BUF_TYPE = MMAP; /* Default */
 	/* Get arguments */
 	int opt;
-	while((opt = getopt(argc,argv,"d")) != -1)
+	while((opt = getopt(argc,argv,"dmu")) != -1)
 	{
 		switch(opt)
 		{
-			case 'd': debug = 1;
-			default: printf("Usage: nacv [-d]\n");
+			case 'd': debug = 1; break;
+			case 'm': BUF_TYPE = MMAP; break;
+			case 'u': BUF_TYPE = USERPTR; break; 
+			default: printf("Usage: nacv [-d debug, -m mmap, -u userptr]\n");
 		}
 	
 	}
@@ -41,14 +45,13 @@ int main(int argc, char *argv[])
 	/* Set calibration data */	
 	struct calibration_data cdata;
 	cdata.constant = 3725.19;
-	cdata.fov_radians = 0.9337511;
 
 	/* Create image_u8 struct */
 	int stride = generate_stride(CAMERA_WIDTH, 96);
 	image_u8_t *im = create_image_u8(CAMERA_WIDTH,CAMERA_HEIGHT,stride);
 	
 	/* Default camera device is video0 */
-	int fd = init_everything(CAMERA_WIDTH,CAMERA_HEIGHT);
+	int fd = init_everything(CAMERA_WIDTH,CAMERA_HEIGHT,BUF_TYPE);
 
 	/* Start server */
 	pthread_t thread;

@@ -49,6 +49,7 @@ int			    r, fd = -1;
 unsigned int		    i, n_buffers;
 static struct buffer        *buffers;
 char 			    out_name[255];
+enum buf_types              buf_type_e;
 
 void set_camera_settings(uint32_t ctrl_class, uint32_t id, int32_t value)
 {
@@ -65,14 +66,68 @@ void set_camera_settings(uint32_t ctrl_class, uint32_t id, int32_t value)
 	xioctl(fd, VIDIOC_S_EXT_CTRLS, &cam_ctrl);
 }
 
-int init_everything(int width, int height)
+int init_everything(int width, int height, enum buf_types btype)
 {
 	int fd = init_cam("/dev/video0",width,height);
-	init_mmap();
+	buf_type_e = btype;
+	switch(buf_type_e)
+	{	case MMAP:
+			init_mmap();
+			break;
+		case USERPTR:
+			init_userp(CAMERA_WIDTH * CAMERA_HEIGHT * 3);
+			break;
+		default:
+			printf("NO BUFFER TYPE SPECIFIED!\n");
+			break;
+	}
 	return fd;
+}
+/* Create userpointers because that's fast or sum!! */
+void init_userp(unsigned int buffer_size)
+{
+	CLEAR(v_request);
+
+	v_request.count = 4;
+	v_request.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+	v_request.memory = V4L2_MEMORY_USERPTR;
+
+	xioctl(fd,VIDIOC_REQBUFS,&v_request);
+
+	buffers = calloc(4, sizeof(*buffers));
+	
+	/* Intiliaze pointers */
+	for(n_buffers = 0; n_buffers < 4; n_buffers++)
+	{
+		buffers[n_buffers].length = buffer_size;
+		buffers[n_buffers].start = malloc(buffer_size);
+	}
+
+	/* Queue buffers */
+	for(i = 0; i < n_buffers; n_buffers++)
+	{
+		CLEAR(v_buf);
+		v_buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+		v_buf.memory = V4L2_MEMORY_USERPTR;
+		v_buf.index = i;
+		v_buf.m.userptr = (unsigned long)buffers[i].start;
+		v_buf.length = buffers[i].length;
+		xioctl(fd,VIDIOC_QBUF,&v_buf);
+	}
+}
+/* Cleanup buffers or you have big memory leak no goody!! */
+void cleanup_userp()
+{
+	for(int i = 0; i < 4; i++)
+	{
+		free(buffers[i].start);
+	}
+
+	free(buffers);
 }
 
 /* Create a 2 buffer memory map of the device */
+
 void init_mmap()
 {
 	CLEAR(v_request);
@@ -190,11 +245,18 @@ void close_cam(int fd)
 	printf("Closing camera, goodbye cruel world!\n");
 
 	/* Close mmap */
-	for(i = 0; i < n_buffers; i++)
+	switch(buf_type_e)
 	{
-		v4l2_munmap(buffers[i].start,buffers[i].length);
+		case MMAP:
+			for(i = 0; i < n_buffers; i++)
+			{
+				v4l2_munmap(buffers[i].start,buffers[i].length);
+			}
+			break;
+		case USERPTR:
+			cleanup_userp();
+			break;
 	}
-	
 	sleep(1);
 
 	v4l2_close(fd);
