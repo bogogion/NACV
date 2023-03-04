@@ -1,11 +1,13 @@
-# Native AprilTag Computer Vision system written in C
+# NACV
 
-## For use by FRC team 3824 (HVA), but code is avaiable for any other teams
+### Native AprilTag Computer Vision system written in C
 
 ## MAJOR: This repo is currently a WIP parts of this readme may be inaccurate for the time being!
 
 ## Info
 Camera input and processing handled by v4l2 (Video for Linux 2).
+
+Written for the FRC 3824 (HVA) team, can be used elsewhere.
 
 For all information (as I add it)
 
@@ -15,7 +17,6 @@ For all information (as I add it)
 - Write complete documentation on camera code for further maintence.
 - Test.
 - Figure out mounting on robot.
-- Fix angle math function
 - Add config for height/width/decision threshold
 
 ## Quick Use
@@ -23,11 +24,17 @@ For all information (as I add it)
 
 `nacv -d` for debug images in working directory
 
-By default the Pi will send packets from port 5805 (frc compatible)
+To change memory type (userptr is fastest):
+
+`nacv -u` for userptr or `nacv -m` for mmap (mmap is default, recommended to switch to -u if supported!)
+
+By default the Pi will send packets from port 5805 to 5805 (frc compatible)
 
 ## Troubleshooting
 - `XIOCTL_CALL: Bad file descriptor` means your camera is not plugged in or it is under a different device name, run `ls /dev/ | grep "video"` to find
 the correct device. (its often `video0`)
+- `XIOCTL_CALL: Invalid Argument` on startup
+    - Means that you are most likely using the wrong buffer type try `-m` or `-u` to change buffer type
 - Detector not detecting?
     - Make sure the tag is completely visible
     - Double check you are using the correct tag family (default is Tag16h5)
