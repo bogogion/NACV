@@ -7,11 +7,11 @@
 ## Info
 Camera input and processing handled by v4l2 (Video for Linux 2).
 
-Written for the FRC 3824 (HVA) team, can be used elsewhere.
+*Written for the FRC 3824 (HVA) team, can be used elsewhere.*
 
 For all information (as I add it)
 
-[Wiki](https://github.com/bogogion/frc-2023-cv/wiki)
+[*Wiki*](https://github.com/bogogion/frc-2023-cv/wiki)
 
 ## Current Todo:
 - Write complete documentation on camera code for further maintence.
