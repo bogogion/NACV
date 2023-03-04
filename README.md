@@ -1,17 +1,36 @@
 # NACV
-
-### Native AprilTag Computer Vision system written in C
-
-## MAJOR: This repo is currently a WIP parts of this readme may be inaccurate for the time being!
+> Native AprilTag Computer Vision system written in C
+> *Written for the FRC 3824 (HVA) team, can be used elsewhere.*
 
 ## Info
-Camera input and processing handled by v4l2 (Video for Linux 2).
+*For specifics, and documentation:* [*Wiki*](https://github.com/bogogion/NACV/wiki)
 
-*Written for the FRC 3824 (HVA) team, can be used elsewhere.*
+## Installation guide
+Download the latest release from [*AprilTag*](https://github.com/AprilRobotics/apriltag)
+> Note, do not clone the repo, download the latest release and unzip it
 
-For all information (as I add it)
+Go into the *apriltag* directory and run
 
-[*Wiki*](https://github.com/bogogion/frc-2023-cv/wiki)
+```shell
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+sudo --build build --target install
+```
+
+Then go into `lib/libv4l/` inside the repo and run
+
+```shell
+make
+sudo cp libv4l/libv4l2/*so* /usr/lib/
+sudo cp libv4l/libv4lconvert/*so* /usr/lib/
+```
+
+To install NACV go into `src` and run 
+```shell
+make install
+```
+
+**Important**
+> NACV sends all information over UDP to port 5805, see `exp/` to see a java example to put on RoboRIO
 
 ## Current Todo:
 - Write complete documentation on camera code for further maintence.
