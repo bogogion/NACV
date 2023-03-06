@@ -45,10 +45,10 @@ make install
 
 | Command | Desc |
 | --- | --- |
-| 'nacv' | Default |
-| 'nacv -d' | Print out debug images |
-| 'nacv -m' | Run nacv with memory mapping (default) |
-| 'nacv -u' | Run nacv with userptr (fastest, but not as supporterd) |
+| `nacv` | Default |
+| `nacv -d` | Print out debug images |
+| `nacv -m` | Run nacv with memory mapping (default) |
+| `nacv -u` | Run nacv with userptr (fastest, but not as supporterd) |
 
 By default the Pi will send packets from port 5805 to 5805 (frc compatible)
 > Note, you will most likely have to go and change the destination address in `server/server_client.h under C_IP` to the address of the RoboRIO
