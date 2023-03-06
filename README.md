@@ -59,7 +59,7 @@ the correct device. (its often `video0`)
     - Make sure the tag is completely visible
     - Double check you are using the correct tag family (default is Tag16h5)
     - Make sure you are reading from the correct camera input (usually is not the problem, but if testing on a laptop can present problems)
-    - Run the program `detector_camera -d` to print out debug pnms in the test directory
+    - Run the program `nacv -d` to print out debug pnms in the test directory
     - Change camera settings with the settings file
 - Settings not properly being changed when using .camcfg
     - Double check it is the correct syntax and id
