@@ -4,6 +4,8 @@
 > *Written for the FRC 3824 (HVA) team, can be used elsewhere.*
 
 ## Info
+> This was made for, and will only run on Unix systems.
+
 *For specifics, and documentation:* [*Wiki*](https://github.com/bogogion/NACV/wiki)
 
 ## Installation guide
