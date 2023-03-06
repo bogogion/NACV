@@ -1,10 +1,10 @@
 # NACV
 > Native AprilTag Computer Vision system written in C
 
-> *Written for the FRC 3824 (HVA) team, can be used elsewhere.*
-
 ## Info
 > This was made for, and will only run on Unix systems.
+
+**Written for the FRC 3824 (HVA) team, can be used elsewhere**
 
 *For specifics, and documentation:* [*Wiki*](https://github.com/bogogion/NACV/wiki)
 
