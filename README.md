@@ -49,7 +49,7 @@ To change memory type (userptr is fastest):
 `nacv -u` for userptr or `nacv -m` for mmap (mmap is default, recommended to switch to -u if supported!)
 
 By default the Pi will send packets from port 5805 to 5805 (frc compatible)
-> Note, you will most likely have to go and change the destination address in `server/server_client.h under C_CLIENT` to the address of the RoboRIO
+> Note, you will most likely have to go and change the destination address in `server/server_client.h under C_IP` to the address of the RoboRIO
 
 ## Troubleshooting
 - `XIOCTL_CALL: Bad file descriptor` means your camera is not plugged in or it is under a different device name, run `ls /dev/ | grep "video"` to find
@@ -67,7 +67,8 @@ the correct device. (its often `video0`)
     - Try v4l2-ctl to set the control if all else fails
 - No data coming through server
     - Make sure the client is reading from the correct ports
-    - Ip addresses shouldn't matter too much but be sure both client and server and listening on localhost (127.0.0.1)
+    - Make sure that in `server/server_client.h` under `C_IP` the ip address is set to the RoboRIO
+    - Make sure that the radio is properly configured, and that both devices are on the same subnet
 
 ## System Diagram
 * Code
