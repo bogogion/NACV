@@ -59,7 +59,7 @@ By default the Pi will send packets from port 5805 to 5805 (frc compatible)
     * /src/camera = camera code, processing code, and config for camera
     * /src/math = math for detections
     * /src/server = server code
-    * /cfg/test.camcfg = test config for camera settings
+    * /config/test.camcfg = test config for camera settings
 * Rasberry PI
     * Computer Vision code, written in C.
     * Possible Image replaying (replication to other remote clients, ie. a controller)
