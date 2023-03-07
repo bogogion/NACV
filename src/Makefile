@@ -4,7 +4,7 @@ LIB = -lapriltag -lm -lv4l2 -lpthread
 TARGET = nacv
 CFG_TARGET = ~/.config/NACV/cam.camcfg
 CFG_DIR = ~/.config/NACV
-CFG_ORG = ../cfg/test.camcfg
+CFG_ORG = ../config/test.camcfg
 all: $(SRCS)
 	$(CC) $(SRCS) $(LIB) -O3 -o $(TARGET)
 install: $(SRCS)
