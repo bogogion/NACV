@@ -1,0 +1,50 @@
+# Example config
+# remove the '#' to uncomment
+
+
+[User] # IDs represented in camera.h
+# Brightness
+# 0x00980900: 133;
+
+# Contrast
+# 0x00980901: 0;
+
+# Saturation 
+# 0x00980902: 0;
+
+# Pi only
+
+# Red Balance
+# 0x0098090e 1000;
+
+# Blue Balance
+# 0x0098090f 1000;
+
+# Color effects 1-15
+# 0x0098091f: 1;
+
+# Color effects cbcbr
+# 0x0098092a: 32896;
+
+# Sharpness
+# 0x0098091b: 0;
+
+[Camera] # IDs represented in camera.h 
+# Auto Exposure
+# 0x009a0901: 0; 
+
+# Exposure Time
+# 0x009a0902: 160;
+
+# Image Stabilization
+# 0x009a0916: 1;
+
+# Iso Sensitivity Auto
+# 0x009a0918: 1;
+
+[Detector]
+N_THREADS: 4; # int
+# QUAD_DECIMATE: .3; # float
+# QUAD_SIGMA: 0; # float
+# REFINE_EDGES: 0; # bool/int
+# DECODE_SHARP: .25; # float
