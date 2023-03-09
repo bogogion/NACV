@@ -39,6 +39,7 @@ make install
 - Write complete documentation on camera code for further maintence.
 - Test.
 - Figure out mounting on robot.
+- Fix weird memory issue on pi for doing home directory
 - Add config for height/width/decision threshold
 
 ## Quick Use
