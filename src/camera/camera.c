@@ -88,41 +88,42 @@ void init_userp(unsigned int buffer_size)
 {
 	CLEAR(v_request);
 
-	v_request.count = 4;
+	/* Doing several buffers with userptr causes a crash with V4L2 */
+	v_request.count = 1;
 	v_request.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 	v_request.memory = V4L2_MEMORY_USERPTR;
 
-	xioctl(fd,VIDIOC_REQBUFS,&v_request);
+	/* Check if the jawn work */
+	if(-1 == ioctl(fd, VIDIOC_REQBUFS, &v_request))
+	{
+		if(EINVAL == errno)
+		{
+			printf("DEVICE DOES NOT SUPPORT USERPOINTER, EXITING!\n");
+		} else {
+			return;
+		}
+	}
 
-	buffers = calloc(4, sizeof(*buffers));
+	buffers = calloc(1, sizeof(*buffers));
 	
 	/* Intiliaze pointers */
-	for(n_buffers = 0; n_buffers < 4; n_buffers++)
-	{
-		buffers[n_buffers].length = buffer_size;
-		buffers[n_buffers].start = malloc(buffer_size);
-	}
+	buffers[n_buffers].length = buffer_size;
+	buffers[n_buffers].start = malloc(buffer_size);
 
 	/* Queue buffers */
-	for(i = 0; i < n_buffers; n_buffers++)
-	{
-		CLEAR(v_buf);
-		v_buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-		v_buf.memory = V4L2_MEMORY_USERPTR;
-		v_buf.index = i;
-		v_buf.m.userptr = (unsigned long)buffers[i].start;
-		v_buf.length = buffers[i].length;
-		xioctl(fd,VIDIOC_QBUF,&v_buf);
-	}
+	CLEAR(v_buf);
+	v_buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+	v_buf.memory = V4L2_MEMORY_USERPTR;
+	v_buf.index = i;
+	v_buf.m.userptr = (unsigned long)buffers[0].start;
+	v_buf.length = buffer_size;
+	xioctl(fd,VIDIOC_QBUF,&v_buf);
+	
 }
 /* Cleanup buffers or you have big memory leak no goody!! */
 void cleanup_userp()
 {
-	for(int i = 0; i < 4; i++)
-	{
-		free(buffers[i].start);
-	}
-
+	free(buffers[0].start);
 	free(buffers);
 }
 
