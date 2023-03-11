@@ -14,7 +14,6 @@ float grab_angle(double p[4][2])
 
 	/* -45 is the constant */
 	float angle_to_target = (((atan(dx/dy))/3.12)*180)-45.0;
-	printf("%f \n",angle_to_target);
 	if(angle_to_target<0){return (angle_to_target*-1);}
 	
 	return angle_to_target;
