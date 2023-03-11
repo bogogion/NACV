@@ -64,10 +64,9 @@ int main(int argc, char *argv[])
 	apriltag_family_t *tf = tag16h5_create();
 	apriltag_detector_add_family(td,tf);
 
-	char *file;
+	char file[512];
 	char *location = "/.config/NACV/cam.camcfg";
 	
-	file = malloc(strlen(getenv("HOME") + strlen(location) + 1));
 	strcpy(file,getenv("HOME"));
 	strcat(file,location);
 	
