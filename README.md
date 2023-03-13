@@ -33,7 +33,7 @@ make install
 ```
 
 **Important**
-> NACV sends all information over UDP to port 5805, see `exp/` to see a java example to put on RoboRIO
+> NACV sends all information over UDP to port 5805, see `example/` to see a java example to put on RoboRIO
 
 ## Current Todo:
 - **Write complete documentation on camera code for further maintence.**
