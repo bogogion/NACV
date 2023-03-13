@@ -36,10 +36,8 @@ make install
 > NACV sends all information over UDP to port 5805, see `exp/` to see a java example to put on RoboRIO
 
 ## Current Todo:
-- Write complete documentation on camera code for further maintence.
+- **Write complete documentation on camera code for further maintence.**
 - Test.
-- Figure out mounting on robot.
-- Fix weird memory issue on pi for doing home directory
 - Add config for height/width/decision threshold
 
 ## Quick Use
