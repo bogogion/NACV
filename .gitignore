@@ -4,6 +4,5 @@
 *.so
 *.so.*
 vgcore*
-test*
 nacv
 debug_*
