@@ -47,3 +47,14 @@ int grab_area(double p[4][2])
 	}
 	return area;
 }
+
+
+float gen_constant_data(float c[2][2])
+{
+	float m = (c[1][1]-c[0][1]) / (c[0][0]-c[1][0]);
+
+
+
+
+
+}

@@ -11,6 +11,9 @@
 char buf[MAX_MES_SIZE];
 s_packet G_packet;
 
+uint8_t byte_order;
+byte_order = 1; /* 1 is big endian */
+
 int server_fd, new_socket;
 struct sockaddr_in server_address, client_address;
 
@@ -42,6 +45,10 @@ void init_server(char *address, int port)
 	client_address.sin_port = htons(C_PORT);
 
 	bind(server_fd, (struct sockaddr*)&server_address,sizeof(server_address));
+
+	/* search for endianness */
+	uint8_t swap[2] = {1,0}; /* 00000001 00000000 on big endian */ 
+	if(*(uint16_t *)swap == 1){byte_order = 0}
 }
 
 void send_message(s_packet packet, int sock_fd, struct sockaddr_in server_address, struct sockaddr_in client_address)
@@ -52,19 +59,36 @@ void send_message(s_packet packet, int sock_fd, struct sockaddr_in server_addres
 	/* Distance float */
 	packet.conv.f = packet.dist;
 
-	buf[1] = packet.conv.s[3];
-	buf[2] = packet.conv.s[2];
-	buf[3] = packet.conv.s[1];
-	buf[4] = packet.conv.s[0];
 
-	/* Angle float */
-	packet.conv.f = packet.angle;
+	/* byte order checking */
+	if(!byte_order)
+	{
+		buf[1] = packet.conv.s[3];
+		buf[2] = packet.conv.s[2];
+		buf[3] = packet.conv.s[1];
+		buf[4] = packet.conv.s[0];
 
-	buf[5] = packet.conv.s[3];
-	buf[6] = packet.conv.s[2];
-	buf[7] = packet.conv.s[1];
-	buf[8] = packet.conv.s[0];
+		/* Angle float */
+		packet.conv.f = packet.angle;
 
+		buf[5] = packet.conv.s[3];
+		buf[6] = packet.conv.s[2];
+		buf[7] = packet.conv.s[1];
+		buf[8] = packet.conv.s[0];
+	} else {		
+		buf[1] = packet.conv.s[0];
+		buf[2] = packet.conv.s[1];
+		buf[3] = packet.conv.s[2];
+		buf[4] = packet.conv.s[3];
+
+		/* Angle float */
+		packet.conv.f = packet.angle;
+
+		buf[5] = packet.conv.s[0];
+		buf[6] = packet.conv.s[1];
+		buf[7] = packet.conv.s[2];
+		buf[8] = packet.conv.s[3];
+	}
 	/* Send packet */
 	if(sendto(sock_fd,buf,9,0,(struct sockaddr*)&client_address,sizeof(server_address)) == -1)
 	{
