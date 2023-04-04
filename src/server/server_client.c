@@ -11,8 +11,7 @@
 char buf[MAX_MES_SIZE];
 s_packet G_packet;
 
-uint8_t byte_order;
-byte_order = 1; /* 1 is big endian */
+uint8_t byte_order = 1;
 
 int server_fd, new_socket;
 struct sockaddr_in server_address, client_address;
@@ -48,7 +47,7 @@ void init_server(char *address, int port)
 
 	/* search for endianness */
 	uint8_t swap[2] = {1,0}; /* 00000001 00000000 on big endian */ 
-	if(*(uint16_t *)swap == 1){byte_order = 0}
+	if(*(uint16_t *)swap == 1){byte_order = 0;}
 }
 
 void send_message(s_packet packet, int sock_fd, struct sockaddr_in server_address, struct sockaddr_in client_address)

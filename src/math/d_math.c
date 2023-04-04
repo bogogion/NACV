@@ -31,7 +31,7 @@ float grab_distance(double p[4][2], struct calibration_data *cdata)
 		area = area * -1;
 	}
 
-	return (cdata->constant * pow(area,-.5));
+	return ((cdata->m * area) + cdata->b);
 }
 
 /* debug function */
@@ -49,12 +49,9 @@ int grab_area(double p[4][2])
 }
 
 
-float gen_constant_data(float c[2][2])
+/* x = area y = dist */
+float gen_constant_data(float c[2][2], struct calibration_data *cdata)
 {
-	float m = (c[1][1]-c[0][1]) / (c[0][0]-c[1][0]);
-
-
-
-
-
+	cdata->m = (c[1][1]-c[0][1]) / (c[0][0]-c[1][0]);
+	cdata->b = (c[0][1] - (cdata->m*c[0][0]));
 }

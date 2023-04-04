@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
 
 	/* Set calibration data */	
 	struct calibration_data cdata;
-	cdata.constant = 3725.19;
-
+	cdata.m = 0;
+	cdata.b = 0; /* hold values */
 	/* Create image_u8 struct */
 	int stride = generate_stride(CAMERA_WIDTH, 96);
 	image_u8_t *im = create_image_u8(CAMERA_WIDTH,CAMERA_HEIGHT,stride);
