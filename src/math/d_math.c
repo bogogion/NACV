@@ -21,20 +21,11 @@ float grab_angle(double p[4][2])
 
 float grab_distance(double p[4][2], struct calibration_data *cdata)
 {
-	int area = ((p[0][0]*p[1][1])-(p[1][0]*p[0][1])) + ((p[1][0]*p[2][1])-(p[2][0]*p[1][1]))
-		   + ((p[2][0]*p[3][1])-(p[3][0]*p[2][1])) + ((p[3][0]*p[0][1])-(p[0][0]*p[3][1]));
-	area = area /2;
-	
-	/* Absolute value*/
-	if(area < 0)
-	{
-		area = area * -1;
-	}
+	int area = grab_area(p);
 
 	return ((cdata->m * area) + cdata->b);
 }
 
-/* debug function */
 int grab_area(double p[4][2])
 {	
 	int area = ((p[0][0]*p[1][1])-(p[1][0]*p[0][1])) + ((p[1][0]*p[2][1])-(p[2][0]*p[1][1]))

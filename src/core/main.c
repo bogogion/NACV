@@ -46,6 +46,17 @@ int main(int argc, char *argv[])
 	struct calibration_data cdata;
 	cdata.m = 0;
 	cdata.b = 0; /* hold values */
+	
+	float t[2][2] = {10000,12,
+			 7000,24};
+
+	gen_constant_data(t,&cdata);
+
+	printf("%fm %fb\n",cdata.m,cdata.b);
+	
+	float dist_test = (cdata.m * 10000) + cdata.b;
+	printf("%f dist\n",dist_test);
+
 	/* Create image_u8 struct */
 	int stride = generate_stride(CAMERA_WIDTH, 96);
 	image_u8_t *im = create_image_u8(CAMERA_WIDTH,CAMERA_HEIGHT,stride);
