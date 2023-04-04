@@ -5,7 +5,7 @@
 #include "../camera/processing.h"
 #include "../camera/camera.h"
 #include "../camera/config.h"
-#include "../math/d_math.h"
+// ^^^^^ #include "../math/d_math.h"
 #include "../server/server_client.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,20 +42,7 @@ int main(int argc, char *argv[])
 	
 	}
 
-	/* Set calibration data */	
 	struct calibration_data cdata;
-	cdata.m = 0;
-	cdata.b = 0; /* hold values */
-	
-	float t[2][2] = {10000,12,
-			 7000,24};
-
-	gen_constant_data(t,&cdata);
-
-	printf("%fm %fb\n",cdata.m,cdata.b);
-	
-	float dist_test = (cdata.m * 10000) + cdata.b;
-	printf("%f dist\n",dist_test);
 
 	/* Create image_u8 struct */
 	int stride = generate_stride(CAMERA_WIDTH, 96);
@@ -81,7 +68,7 @@ int main(int argc, char *argv[])
 	strcpy(file,getenv("HOME"));
 	strcat(file,location);
 	
-	set_settings_from_config(file,td);
+	set_settings_from_config(file,td,&cdata);
 
 	/* Handles Ctrl + C end of loop */
 	signal(SIGINT, intHandler);
