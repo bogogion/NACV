@@ -4,7 +4,9 @@
 #include <apriltag/apriltag.h> /* For detector */
 #include "config.h"
 #include "camera.h"
-void set_settings_from_config(char *pathname, apriltag_detector_t *td, struct calibration_data *cdata)
+
+/* I understand that this is a mess, I have no clue how to do it any other way. TODO: make this better! */
+void set_settings_from_config(char *pathname, apriltag_detector_t *td)
 {
 	char buf[255];
 	char temp_token[255];
@@ -75,14 +77,6 @@ void set_settings_from_config(char *pathname, apriltag_detector_t *td, struct ca
 					t_pos = 0;
 					break;
 				}
-				else if(strcmp(temp_token,"Calibration") == 0)
-				{
-					cstate = CALIBRATION;
-					CLEAR(temp_token);
-					t_pos = 0;
-					break;
-				}
-
 			}
 
 			/* Read values and act on them! */
@@ -116,14 +110,6 @@ void set_settings_from_config(char *pathname, apriltag_detector_t *td, struct ca
 							CLEAR(temp_token);
 							CLEAR(temp_value);
 
-							break;
-						case CALIBRATION:
-							char *pend;
-							
-							if(strcmp("M_VALUE",temp_token) == 0)	
-							{cdata->m = (float)strtof(temp_value,NULL);}
-							else if(strcmp("B_VALUE",temp_token) == 0)
-							{cdata->b = (float)strtof(temp_token,NULL);}
 							break;
 						case DETECTOR:
 							if(set_apriltag_setting(td,temp_token,temp_value) > 0)

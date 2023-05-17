@@ -5,7 +5,6 @@
 #include "../camera/processing.h"
 #include "../camera/camera.h"
 #include "../camera/config.h"
-// ^^^^^ #include "../math/d_math.h"
 #include "../server/server_client.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -68,7 +67,7 @@ int main(int argc, char *argv[])
 	strcpy(file,getenv("HOME"));
 	strcat(file,location);
 	
-	set_settings_from_config(file,td,&cdata);
+	set_settings_from_config(file,td);
 
 	/* Handles Ctrl + C end of loop */
 	signal(SIGINT, intHandler);

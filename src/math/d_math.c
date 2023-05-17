@@ -2,10 +2,7 @@
 #include <math.h>
 #include "../camera/camera.h"
 
-/* x = center x 
- * dt = distance
- * */
-
+/* idk how this works, but it works pretty well ig */
 float grab_angle(double p[4][2])
 {
 	float dx,dy;
