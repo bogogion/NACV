@@ -37,6 +37,7 @@ make install
 
 ## Current Todo:
 - **Write complete documentation on camera code for further maintence.**
+- **Add header guards**
 - Add calibration function (please please this sucks!!)
 - PUT CALIBRATION CONFIG FILE IN ANOTHER FILE!!
 - Test.
