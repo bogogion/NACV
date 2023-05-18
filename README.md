@@ -1,5 +1,6 @@
 <h1 align="center">NACV</h1>
-> Native AprilTag Computer Vision system written in C
+
+<p align="center">Native AprilTag Computer Vision system written in C</p>
 
 ## Info
 > This was made for Raspberry Pi / Unix based systems.
