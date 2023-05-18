@@ -12,7 +12,11 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <pthread.h>
+
+/* Settings */
 #define DECISION_THRESHOLD 70
+#define LOWEST_TAG  1
+#define HIGHEST_TAG 8
 
 int run = 1;
 int debug = 0;
@@ -90,10 +94,10 @@ int main(int argc, char *argv[])
 			{
 				zarray_get(detections, i, &det);
 
-				if(det->decision_margin > DECISION_THRESHOLD && det->id >= 1 && det->id <= 8)
+				if(det->decision_margin > DECISION_THRESHOLD && det->id >= LOWEST_TAG && det->id <= HIGHEST_TAG)
 				{
-					float dist = grab_distance(det->p,&cdata);
-					update_packet(det->id,dist,grab_angle(det->p));
+					//float dist = grab_distance(det->p,&cdata);
+					//update_packet(det->id,dist,grab_angle(det->p));
 				
 				}
 			}
@@ -101,6 +105,8 @@ int main(int argc, char *argv[])
 		}
 		zarray_destroy(detections);
 	}
+
+	/* Cleanup */
 	pthread_cancel(thread);
 	destroy_image_u8(im);
 

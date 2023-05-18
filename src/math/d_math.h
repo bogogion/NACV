@@ -5,12 +5,14 @@
 /* Data from calibration */
 struct calibration_data
 {
-	/* Constants */
-	float m,b;
+	/* Exponential constants */
+	float a,b;
 };
 
 float grab_angle(double p[4][2]);
 int grab_area(double p[4][2]);
-float grab_distance(double p[4][2], struct calibration_data *cdata);
-float gen_constant_data(float c[2][2], struct calibration_data *cdata);
+void gen_exponential_data(double c[5][2], struct calibration_data *cdata);
+
+/* Calibration functions */
+float distance_exponential(double area, struct calibration_data cdata);
 #endif

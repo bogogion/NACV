@@ -16,13 +16,6 @@ float grab_angle(double p[4][2])
 	return angle_to_target;
 }
 
-float grab_distance(double p[4][2], struct calibration_data *cdata)
-{
-	int area = grab_area(p);
-
-	return ((cdata->m * area) + cdata->b);
-}
-
 int grab_area(double p[4][2])
 {	
 	int area = ((p[0][0]*p[1][1])-(p[1][0]*p[0][1])) + ((p[1][0]*p[2][1])-(p[2][0]*p[1][1]))
@@ -36,10 +29,51 @@ int grab_area(double p[4][2])
 	return area;
 }
 
-
-/* x = area y = dist */
-float gen_constant_data(float c[2][2], struct calibration_data *cdata)
+/* Returns a & b of y = a*b^x for exponential equation */
+void gen_exponential_data(double c[5][2], struct calibration_data *cdata)
 {
-	cdata->m = (c[1][1]-c[0][1]) / (c[0][0]-c[1][0]);
-	cdata->b = (c[0][1] - (cdata->m*c[0][0]));
+	uint8_t n = 5; /* no. of points */
+
+	double log_c[5][2];
+
+	/* initiliaze our log of y array for linear regression */
+	for(int i = 0; i < n; i++)
+	{
+		log_c[i][0] = c[i][0];
+		log_c[i][1] = log10(c[i][1]);
+	}
+
+	/* find our sums needed for equation */
+	double xy_sum        = 0;
+	double x_sum	     = 0;
+	double y_sum 	     = 0;
+	double x_squared_sum = 0;
+
+	for(int i = 0; i < n; i++)
+	{
+		xy_sum        += (log_c[i][0] * log_c[i][1]);
+		x_sum         += (log_c[i][0]);
+		y_sum         += (log_c[i][1]);
+		x_squared_sum += (pow(log_c[i][0],2));
+	}
+	
+	/* do our linear regression */
+	double lm, lb, div_comp;
+
+	/* instead of doing this twice we do it once */
+	div_comp = ((n*x_squared_sum) - pow(x_sum,2));
+	
+	lm = ((y_sum*x_squared_sum) - (x_sum * xy_sum)) / div_comp;
+	lb = ((n*xy_sum)-(x_sum*y_sum)) / div_comp;
+
+	/* set our data points */
+	cdata->a = pow(10,lm);
+	cdata->b = pow(10,lb);
 }
+
+/* do our actual exponential equation */
+float distance_exponential(double area, struct calibration_data cdata)
+{
+	return(cdata.a*pow(cdata.b,area));
+}
+
