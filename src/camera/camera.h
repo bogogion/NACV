@@ -1,6 +1,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include "../../lib/libv4l/include/libv4l2.h"
+#include "../math/d_math.h"
 
 #ifndef CAMERA_H
 #define CAMERA_H
@@ -37,4 +38,6 @@ void set_cam_settings(int width, int height, int pformat); /* Used internally in
 int init_cam(char *dev_name, int width, int height); /* Return file descriptor */
 void start_stream(int fd);
 void close_cam(int fd); /* Cleans buffer too */
+void calibrate_process(struct calibration_data *cdata, uint8_t photo_count);
+
 #endif

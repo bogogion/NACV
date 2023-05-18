@@ -75,7 +75,7 @@ int init_everything(int width, int height, enum buf_types btype)
 			init_mmap();
 			break;
 		case USERPTR:
-			init_userp(CAMERA_WIDTH * CAMERA_HEIGHT * 3);
+			init_userp(width * height * 3);
 			break;
 		default:
 			printf("NO BUFFER TYPE SPECIFIED!\n");

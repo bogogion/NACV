@@ -1,8 +1,8 @@
-# NACV
+<h1 align="center">NACV</h1>
 > Native AprilTag Computer Vision system written in C
 
 ## Info
-> This was made for, and will only run on Unix systems.
+> This was made for Raspberry Pi / Unix based systems.
 
 **Written for the FRC 3824 (HVA) team, can be used elsewhere**
 

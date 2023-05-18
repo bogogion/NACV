@@ -14,7 +14,7 @@
 #include <pthread.h>
 
 /* Settings */
-#define DECISION_THRESHOLD 70
+#define DECISION_THRESHOLD 50
 #define LOWEST_TAG  1
 #define HIGHEST_TAG 8
 
@@ -99,6 +99,7 @@ int main(int argc, char *argv[])
 					//float dist = grab_distance(det->p,&cdata);
 					//update_packet(det->id,dist,grab_angle(det->p));
 				
+					printf("Tag Found: %i\n",det->id);
 				}
 			}
 		
