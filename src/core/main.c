@@ -14,7 +14,7 @@
 #include <pthread.h>
 
 /* Settings */
-#define DECISION_THRESHOLD 50
+#define DECISION_THRESHOLD 70
 #define LOWEST_TAG  1
 #define HIGHEST_TAG 8
 
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 				if(det->decision_margin > DECISION_THRESHOLD && det->id >= LOWEST_TAG && det->id <= HIGHEST_TAG)
 				{
 					int area = grab_area(det->p);
-					float dist = distance_exponential(area,&cdata);
+					float dist = distance_exponential(area,cdata);
 					update_packet(det->id,dist,grab_angle(det->p));
 				}
 			}
