@@ -38,10 +38,8 @@ make install
 
 ## Current Todo:
 - **Write complete documentation on camera code for further maintence.**
-- Add calibration function (please please this sucks!!)
-- PUT CALIBRATION CONFIG FILE IN ANOTHER FILE!!
+- Doing => PUT CALIBRATION CONFIG FILE IN ANOTHER FILE!!
 - Test.
-- Add config for height/width/decision threshold
 
 ## Quick Use
 

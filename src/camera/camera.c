@@ -262,3 +262,18 @@ void close_cam(int fd)
 
 	v4l2_close(fd);
 }
+
+/* Calibration */
+void calibrate_process(struct calibration_data *cdata, apriltag_detector_t *td, image_u8_t *im)
+{
+	double coords[5][2];
+
+	int precision_value = 70; /* decision threshold for detections */
+
+	printf("Welcome to calibration!\n Position the camera so that it is on an even level, and that it is directly facing and AprilTag.\n");
+
+	printf("Press anything to take a photo.\n");
+	getchar();
+
+	/* TODO: finish this */	
+}
