@@ -10,6 +10,7 @@
 *For specifics, and documentation:* [*Wiki*](https://github.com/bogogion/NACV/wiki)
 
 <h2 align="center">Installation guide</h2>
+
 Download the latest release from [*AprilTag*](https://github.com/AprilRobotics/apriltag)
 > Note, do not clone the repo, download the latest release and unzip it
 
