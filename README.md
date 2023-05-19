@@ -2,7 +2,7 @@
 
 <p align="center">Native AprilTag Computer Vision system written in C</p>
 
-## Info
+<h2 align="center">Info</h2>
 > This was made for Raspberry Pi / Unix based systems.
 
 **Written for the FRC 3824 (HVA) team, can be used elsewhere**
@@ -36,12 +36,12 @@ make install
 **Important**
 > NACV sends all information over UDP to port 5805, see `example/` to see a java example to put on RoboRIO
 
-## Current Todo:
+<h2 align="center">ToDo:</h2>
 - **Write complete documentation on camera code for further maintence.**
 - Doing => PUT CALIBRATION CONFIG FILE IN ANOTHER FILE!!
 - Test.
 
-## Quick Use
+<h2 align="center">Quick Use:</h2>
 
 | Command | Desc |
 | --- | --- |
@@ -53,7 +53,7 @@ make install
 By default the Pi will send packets from port 5805 to 5805 (frc compatible)
 > Note, you will most likely have to go and change the destination address in `server/server_client.h under C_IP` to the address of the RoboRIO
 
-## System Diagram
+<h2 align="center">System Diagram</h2>
 * Code
     * /src/core = main file and test/debug files
     * /src/camera = camera code, processing code, and config for camera
