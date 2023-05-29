@@ -18,50 +18,17 @@ Until further work is done consider most if not all of the documentation to be o
 
 *For specifics, and documentation:* [*Wiki*](https://github.com/bogogion/NACV/wiki)
 
-<h2 align="center">Installation guide</h2>
-
-Download the latest release from [*AprilTag*](https://github.com/AprilRobotics/apriltag)
-> Note, do not clone the repo, download the latest release and unzip it
-
-Go into the *apriltag* directory and run
-
-```shell
-cmake -B build -DCMAKE_BUILD_TYPE=Release
-sudo --build build --target install
-```
-
-Then go into `lib/libv4l/` inside the repo and run
-
-```shell
-make
-sudo cp libv4l/libv4l2/*so* /usr/lib/
-sudo cp libv4l/libv4lconvert/*so* /usr/lib/
-```
-
-To install NACV go into `src` and run 
-```shell
-make install
-```
-
-**Important**
-> NACV sends all information over UDP to port 5805, see `example/` to see a java example to put on RoboRIO
-
-<h2 align="center">ToDo:</h2>
-- **Write complete documentation on camera code for further maintence.**
-- Doing => PUT CALIBRATION CONFIG FILE IN ANOTHER FILE!!
-- Test.
-
-<h2 align="center">Quick Use:</h2>
-
-| Command | Desc |
-| --- | --- |
-| `nacv` | Default |
-| `nacv -d` | Print out debug images |
-| `nacv -m` | Run nacv with memory mapping (default) |
-| `nacv -u` | Run nacv with userptr (fastest, but not as supporterd) |
-
-By default the Pi will send packets from port 5805 to 5805 (frc compatible)
-> Note, you will most likely have to go and change the destination address in `server/server_client.h under C_IP` to the address of the RoboRIO
+<h2 align="center">Todo:</h2>
+* [Hardware] Finish design for central control hub for interfacing 4 cameras to RoboRIO / PDH
+* [Hardware] Build central control hub and publish schematics, documentation, parts, and pcb.
+* [Hardware] Design and build voltage regulator circuit for 12V -> 5V 15 AMP.
+* [Camera]   Figure out how to interface the Pi Camera 3 with V4L2 (I suspect just update kernel on the Pi)
+* [Camera]   Test all 3 cameras under one code.
+* [Code]     Finish writing calbibration code, the equations for it already are written.
+* [Code]     Write script to install the auto-start service (systemd).
+* [Code]     Write code for the central control hub. This can be done currently by programming Pi Picos (there will be 3 RP2040 chips in the cch)
+* [Math]     Figure out object detection from scratch if we have time. (maybe? apriltags are being used anyways)
+* [Math]     Figure out pose for AprilTags.
 
 <h2 align="center">System Diagram</h2>
 
@@ -73,7 +40,12 @@ By default the Pi will send packets from port 5805 to 5805 (frc compatible)
     * /config/test.camcfg = test config for camera settings
 * Rasberry PI
     * Computer Vision code, written in C.
-    * Possible Image replaying (replication to other remote clients, ie. a controller)
+* Central Control Hub (CCH)
+    * Takes in input from 4 pis. (Via UART)
+    * Packages this data into an ethernet frame to be sent back to RoboRIO.
+    * Also provides power for all 4 Pis.
+* Voltage Regulator Circuit
+    * Takes in 12-15 V from battey along with a 15 AMP fuse on the PDH and converts/regulates it into 5Vs to be supplied to all of the devices.
 * Robo Rio
-    * Takes data from PI
+    * Takes data from CCH
     * Interprets and acts on that data in the Java code
