@@ -263,17 +263,34 @@ void close_cam(int fd)
 	v4l2_close(fd);
 }
 
-/* Calibration */
+/* Calibration, both functions assume camera properly initialized */
+apriltag_detection *det;
+
+int calibrate_grab_area(apriltag_detector_t *td, image_u8_t *im)
+{
+	zarray_t* detections = get_detections(td,im);
+
+	for(i = 0; i < zarray_size(detections); i++)
+	{
+		zarray_get(detections,i,det);
+		/* Take area of the first applicable tag */
+		if(det->decision_margin >= DECISION_THRESHOLD)
+		{
+			return(grab_area(det->p));
+		}
+	}
+}
+
 void calibrate_process(struct calibration_data *cdata, apriltag_detector_t *td, image_u8_t *im)
 {
 	double coords[5][2];
-
-	int precision_value = 70; /* decision threshold for detections */
 
 	printf("Welcome to calibration!\n Position the camera so that it is on an even level, and that it is directly facing and AprilTag.\n");
 
 	printf("Press anything to take a photo.\n");
 	getchar();
+
+	coords[0][0] = calibrate_grab_area();
 
 	/* TODO: finish this */	
 }

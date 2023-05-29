@@ -16,6 +16,7 @@
 #include <apriltag/common/zarray.h>
 #include <apriltag/apriltag.h>
 #include <apriltag/common/image_u8.h>
+#define DECISION_THRESHOLD 70
 
 #define CLEAR(x) memset(&(x), 0, sizeof(x))
 
@@ -39,4 +40,5 @@ int init_cam(char *dev_name, int width, int height); /* Return file descriptor *
 void start_stream(int fd);
 void close_cam(int fd); /* Cleans buffer too */
 void calibrate_process(struct calibration_data *cdata, apriltag_detector_t *td, image_u8_t *im);
+int  calibrate_grab_area(apriltag_detector_t *td, image_u8_t *im);
 #endif

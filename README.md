@@ -3,7 +3,16 @@
 <p align="center">Native AprilTag Computer Vision system written in C</p>
 
 <h2 align="center">Info</h2>
-> This was made for Raspberry Pi / Unix based systems.
+
+**NOTICE:**
+
+This repo is currently being rewritten in order to support the 3 main PiCameras. The scope of this project will be shortened
+to just being officially supported for Raspberry Pi's. 
+
+This project as a whole will in the future include several pieces of hardware to support more than just one single camera. All of this math, 
+code, and hardware will be posted within this repo.
+
+Until further work is done consider most if not all of the documentation to be obsolete!
 
 **Written for the FRC 3824 (HVA) team, can be used elsewhere**
 

@@ -14,7 +14,6 @@
 #include <pthread.h>
 
 /* Settings */
-#define DECISION_THRESHOLD 70
 #define LOWEST_TAG  1
 #define HIGHEST_TAG 8
 
