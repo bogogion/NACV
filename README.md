@@ -19,6 +19,7 @@ Until further work is done consider most if not all of the documentation to be o
 *For specifics, and documentation:* [*Wiki*](https://github.com/bogogion/NACV/wiki)
 
 <h2 align="center">Todo:</h2>
+
 * [Hardware] Finish design for central control hub for interfacing 4 cameras to RoboRIO / PDH
 * [Hardware] Build central control hub and publish schematics, documentation, parts, and pcb.
 * [Hardware] Design and build voltage regulator circuit for 12V -> 5V 15 AMP.
