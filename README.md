@@ -42,11 +42,9 @@ Until further work is done consider most if not all of the documentation to be o
 * Rasberry PI
     * Computer Vision code, written in C.
 * Central Control Hub (CCH)
-    * Takes in input from 4 pis. (Via UART)
+    * Takes in input from 4 pis. (Via Ethernet)
     * Packages this data into an ethernet frame to be sent back to RoboRIO.
     * Also provides power for all 4 Pis.
-* Voltage Regulator Circuit
-    * Takes in 12-15 V from battey along with a 15 AMP fuse on the PDH and converts/regulates it into 5Vs to be supplied to all of the devices.
 * Robo Rio
     * Takes data from CCH
     * Interprets and acts on that data in the Java code
