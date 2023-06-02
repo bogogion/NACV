@@ -22,14 +22,12 @@ Until further work is done consider most if not all of the documentation to be o
 
 * [Hardware] Finish design for central control hub for interfacing 4 cameras to RoboRIO / PDH
 * [Hardware] Build central control hub and publish schematics, documentation, parts, and pcb.
-* [Hardware] Design and build voltage regulator circuit for 12V -> 5V 15 AMP.
 * [Camera]   Figure out how to interface the Pi Camera 3 with V4L2 (I suspect just update kernel on the Pi)
 * [Camera]   Test all 3 cameras under one code.
 * [Camera]   Find the best settings for each camera with both low & high light conditions. Save it a setting file
 * [Code]     There were some issues with settings.
 * [Code]     Finish writing calbibration code, the equations for it already are written.
 * [Code]     Write script to install the auto-start service (systemd).
-* [Code]     Write code for the central control hub. This can be done currently by programming Pi Picos (there will be 3 RP2040 chips in the cch)
 * [Math]     Figure out object detection from scratch if we have time. (maybe? apriltags are being used anyways)
 * [Math]     Figure out pose for AprilTags.
 
