@@ -264,7 +264,7 @@ void close_cam(int fd)
 }
 
 /* Calibration, both functions assume camera properly initialized */
-apriltag_detection *det;
+apriltag_detection_t *det;
 
 int calibrate_grab_area(apriltag_detector_t *td, image_u8_t *im)
 {
@@ -290,7 +290,7 @@ void calibrate_process(struct calibration_data *cdata, apriltag_detector_t *td, 
 	printf("Press anything to take a photo.\n");
 	getchar();
 
-	coords[0][0] = calibrate_grab_area();
+	//coords[0][0] = calibrate_grab_area();
 
 	/* TODO: finish this */	
 }
