@@ -2,6 +2,8 @@
 
 <p align="center">Native AprilTag Computer Vision system written in C</p>
 
+**Written by Zane Maples for the 3824 FRC Team (RoHawktics), can be used elsewhere**
+
 <h2 align="center">Info</h2>
 
 **NOTICE:**
@@ -24,7 +26,6 @@ code, and hardware will be posted within this repo.
 * Pi Camera 1 (currently has issues with mode setting)
 * 0V9281 (any camera with the sensor) will be officially supported once testing begins
 
-**Written by Zane Maples for the 3824 FRC Team (RoHawktics), can be used elsewhere**
 
 <h2 align="center">Todo:</h2>
 
