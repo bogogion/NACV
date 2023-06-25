@@ -4,6 +4,8 @@
 
 <p align="center"><b>Written by Zane Maples for the 3824 FRC Team (RoHawktics), can be used elsewhere</b></p>
 
+<p align="center"> https://img.shields.io/badge/NACV-green </p>
+
 <h2 align="center">Info</h2>
 
 **NOTICE:**
