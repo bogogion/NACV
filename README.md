@@ -6,32 +6,35 @@
 
 **NOTICE:**
 
-This repo is currently being rewritten in order to support the 3 main PiCameras. The scope of this project will be shortened
-to just being officially supported for Raspberry Pi's. 
+This repo is undergoing a complete redo. The final code will most likely only support a small handfew of sensors, as the cameras must have support for 
+V4L2 and support userpointer buffering.
+
+The project is also being fundamentally rewritten to support complete multiprocessing of frames for accelerated peformance. This project will also be a 
+*strictly* AprilTag vision system for the time being, however a headless (AprilTag less) version will be released to be used with OpenCV and other
+vision pipelines.
 
 This project as a whole will in the future include several pieces of hardware to support more than just one single camera. All of this math, 
 code, and hardware will be posted within this repo.
 
-Until further work is done consider most if not all of the documentation to be obsolete!
+<h2 align="center">Currently Supported Hardware</h2>
 
-**Written for the FRC 3824 (HVA) team, can be used elsewhere**
+* RaspberryPi 3 B/B+
+* RaspberryPi 2 will be tested
+* RaspberryPi 4 currently has not been tested. (note all Pi's must support V4L2 drivers or *legacy* camera stack)
+* Pi Camera 1 (currently has issues with mode setting)
+* 0V9281 (any camera with the sensor) will be officially supported once testing begins
+
+**Written by Zane Maples for the 3824 FRC Team (RoHawktics), can be used elsewhere**
 
 <h2 align="center">Todo:</h2>
 
-* [Hardware] Finish design for central control hub for interfacing 4 cameras to RoboRIO / PDH
-* [Hardware] Build central control hub and publish schematics, documentation, parts, and pcb.
-<<<<<<< HEAD
-* [Camera]   Figure out how to interface the Pi Camera 3 with V4L2 (I suspect just update kernel on the Pi)
-* [Camera]   Test all 3 cameras under one code.
-=======
->>>>>>> 8fa2ff9 (quick update)
-* [Camera]   Find the best settings for each camera with both low & high light conditions. Save it a setting file
-* [Code]     Rewrite all camera code in libcamera C++ to support the newer cameras.
-* [Code]     Finish writing calbibration code, the equations for it already are written.
-* [Code]     Write script to install the auto-start service (systemd).
-<<<<<<< HEAD
-* [Math]     Figure out object detection from scratch if we have time. (maybe? apriltags are being used anyways)
-* [Math]     Figure out pose for AprilTags.
+* [Code] Write support for full options/configuration with cJSON
+* [Code] Write interfacing code / library for NACV and RoboRIO (either direct socket or NT3/4)
+* [Camera] Test with Pi Camera V1 until it works (may require patching of kernel)
+* [Camera] Wait and get the 0V9281 Monochrome sensor and fine tune program for that.
+* [Hardware] Develop/Print a case for Raspberry Pi 3 B/B+
+* [Hardware] Develop an interface board for PDH to power 4 Pis.
+* [Hardware] (MAYBE) Finish CCU for the Pis (built in ethernet switch)
 
 <h2 align="center">System Diagram</h2>
 
