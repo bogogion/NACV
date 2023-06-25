@@ -1,0 +1,14 @@
+{   
+    "camera":{
+        "width"  : 640,
+        "height" : 48,
+        "rgb24"  : 1,
+        "rgb8"   : 0, 
+        "preset" : 0
+    },
+
+    "processor":{
+        "single" : false,
+        "count"  : 4
+    }
+}

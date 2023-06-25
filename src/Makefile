@@ -1,6 +1,6 @@
 CC = gcc
 SRCS = core/* camera/* math/* server/*
-LIB = -lapriltag -lm -lv4l2 -lpthread
+LIB = -lapriltag -lm -lv4l2 -lpthread -lrt
 TARGET = nacv
 CFG_TARGET = ~/.config/NACV/cam.camcfg
 CFG_DIR = ~/.config/NACV

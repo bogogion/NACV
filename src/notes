@@ -1,0 +1,12 @@
+settings
+
+width height
+mode (chooses between several different profiles)
+processors
+single process mode
+format (rgb24 or rgb8)
+apriltag settings
+potential interface for v4l2 settings
+team number
+ntables or udp socket
+network settings

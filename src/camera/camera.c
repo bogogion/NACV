@@ -20,6 +20,7 @@
 #include "../../lib/libv4l/include/libv4l2.h"
 #include "camera.h"
 #include "processing.h"
+#include "../core/shared.h"
 
 void xioctl(int fh, int request, void *arg)
 {
@@ -45,7 +46,8 @@ struct v4l2_requestbuffers  v_request;
 enum v4l2_buf_type	    v_type;
 fd_set			    fds;
 struct timeval		    tv;
-int			    r, fd = -1;
+int			    r, fd = -1, shfd, shfd_ctrl, increment;
+struct data_share *datas;
 unsigned int		    i, n_buffers;
 static struct buffer        *buffers;
 char 			    out_name[255];
@@ -75,7 +77,7 @@ int init_everything(int width, int height, enum buf_types btype)
 			init_mmap();
 			break;
 		case USERPTR:
-			init_userp(width * height * 3);
+			init_shm(width * height * 3);
 			break;
 		default:
 			printf("NO BUFFER TYPE SPECIFIED!\n");
@@ -83,6 +85,60 @@ int init_everything(int width, int height, enum buf_types btype)
 	}
 	return fd;
 }
+
+void init_shm(unsigned int buffer_size)
+{
+
+	CLEAR(v_request);
+
+	/* Doing several buffers with userptr causes a crash with V4L2 */
+	v_request.count = 1;
+	v_request.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+	v_request.memory = V4L2_MEMORY_USERPTR;
+
+	/* Check if the jawn work */
+	if(-1 == ioctl(fd, VIDIOC_REQBUFS, &v_request))
+	{
+		if(EINVAL == errno)
+		{
+			printf("DEVICE DOES NOT SUPPORT USERPOINTER, EXITING!\n");
+		} else {
+			return;
+		}
+	}
+
+	buffers = calloc(1, sizeof(*buffers));
+	
+	/* Intiliaze pointers */
+	buffers[0].length = buffer_size;
+
+	/* Create our shm */
+	shfd = shm_open("nacv_data", O_CREAT | O_RDWR, S_IRWXU);
+	ftruncate(shfd, buffer_size);
+
+	buffers[0].start = mmap(NULL, buffer_size, PROT_READ | PROT_WRITE, MAP_SHARED, shfd, 0);
+
+	/* Queue buffers */
+	CLEAR(v_buf);
+	v_buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+	v_buf.memory = V4L2_MEMORY_USERPTR;
+	v_buf.index = 0;
+	v_buf.m.userptr = (unsigned long)buffers[0].start;
+	v_buf.length = buffer_size;
+
+	xioctl(fd,VIDIOC_QBUF,&v_buf);
+
+	shfd_ctrl = shm_open("nacv_ctrl", O_RDWR, 0);
+	datas = mmap(NULL, sizeof(struct data_share), PROT_READ | PROT_WRITE, MAP_SHARED, shfd_ctrl, 0);
+
+}
+
+void cleanup_shm(unsigned int buffer_size)
+{
+	munmap(buffers[0].start,buffer_size);
+	shm_unlink("nacv_data");
+}
+
 /* Create userpointers because that's fast or sum!! */
 void init_userp(unsigned int buffer_size)
 {
@@ -107,14 +163,14 @@ void init_userp(unsigned int buffer_size)
 	buffers = calloc(1, sizeof(*buffers));
 	
 	/* Intiliaze pointers */
-	buffers[n_buffers].length = buffer_size;
-	buffers[n_buffers].start = malloc(buffer_size);
+	buffers[0].length = buffer_size;
+	buffers[0].start = malloc(buffer_size);
 
 	/* Queue buffers */
 	CLEAR(v_buf);
 	v_buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 	v_buf.memory = V4L2_MEMORY_USERPTR;
-	v_buf.index = i;
+	v_buf.index = 0;
 	v_buf.m.userptr = (unsigned long)buffers[0].start;
 	v_buf.length = buffer_size;
 	xioctl(fd,VIDIOC_QBUF,&v_buf);
@@ -127,7 +183,7 @@ void cleanup_userp()
 	free(buffers);
 }
 
-/* Create a 2 buffer memory map of the device */
+/* Create a 4 buffer memory map of the device */
 
 void init_mmap()
 {
@@ -171,31 +227,56 @@ void init_mmap()
 	}
 }
 
-zarray_t* get_detections(apriltag_detector_t *td, image_u8_t *im)
+/* Mainloop for shared memory system. Handles all calls accordingly. */
+
+void mainloop_shm()
 {	
 	do {
-               	FD_ZERO(&fds);
-               	FD_SET(fd, &fds);
+		FD_ZERO(&fds);
+		FD_SET(fd, &fds);
 		 
-                /* Timeout. */
-             	tv.tv_sec = 2;
+		/* Timeout. */
+		tv.tv_sec = 2;
 		tv.tv_usec = 0;
 
-               	r = select(fd + 1, &fds, NULL, NULL, &tv);
-        } while ((r == -1 && (errno = EINTR)));
-        if (r == -1) {
-               perror("select");
-	       return NULL;
-        }
+		r = select(fd + 1, &fds, NULL, NULL, &tv);
+	} 
+	while ((r == -1 && (errno = EINTR)));
+        
+	if (r == -1) {
+		perror("select");
+		return;
+	}
 
-        xioctl(fd, VIDIOC_DQBUF, &v_buf);
-	convert_rgb24_proper(CAMERA_WIDTH,CAMERA_HEIGHT,im->stride,(uint8_t*)buffers[v_buf.index].start,im);
+	xioctl(fd, VIDIOC_DQBUF, &v_buf);
 
-	zarray_t *detections = apriltag_detector_detect(td,im);
+	/* We requeue and return to avoid any of the processes from doing the same frame multiple times */
+
+	for(int i = 0; i < PROCESSORS; i++)
+	{
+		switch(datas->processes[i])
+		{
+			case _C_READY_TO_PROCESS:
+				/* Called once a process is setup and ready */
+				datas->processes[i] = _M_READY_TO_PROCESS;
+				xioctl(fd, VIDIOC_QBUF, &v_buf);
+				return;
+			case _C_DATA_SET:
+				/* Handle data */
+				
+				printf("Data was set, frame %i\n",increment++);
+
+				/* Once done give ok to process */
+				datas->processes[i] = _M_READY_TO_PROCESS;
+				xioctl(fd, VIDIOC_QBUF, &v_buf);
+				return;
+			case PROCESSING:
+				break; /* Ignore */
+		}
+	}
 
 	/* Requeue buffers */
 	xioctl(fd, VIDIOC_QBUF, &v_buf);
-	return detections;
 }
 
 void set_cam_settings(int width, int height, int pformat)
@@ -255,42 +336,10 @@ void close_cam(int fd)
 			}
 			break;
 		case USERPTR:
-			cleanup_userp();
+			cleanup_shm(CAMERA_WIDTH * CAMERA_HEIGHT * 3);
 			break;
 	}
 	sleep(1);
 
 	v4l2_close(fd);
-}
-
-/* Calibration, both functions assume camera properly initialized */
-apriltag_detection_t *det;
-
-int calibrate_grab_area(apriltag_detector_t *td, image_u8_t *im)
-{
-	zarray_t* detections = get_detections(td,im);
-
-	for(i = 0; i < zarray_size(detections); i++)
-	{
-		zarray_get(detections,i,det);
-		/* Take area of the first applicable tag */
-		if(det->decision_margin >= DECISION_THRESHOLD)
-		{
-			return(grab_area(det->p));
-		}
-	}
-}
-
-void calibrate_process(struct calibration_data *cdata, apriltag_detector_t *td, image_u8_t *im)
-{
-	double coords[5][2];
-
-	printf("Welcome to calibration!\n Position the camera so that it is on an even level, and that it is directly facing and AprilTag.\n");
-
-	printf("Press anything to take a photo.\n");
-	getchar();
-
-	//coords[0][0] = calibrate_grab_area();
-
-	/* TODO: finish this */	
 }

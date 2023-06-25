@@ -16,18 +16,20 @@ Until further work is done consider most if not all of the documentation to be o
 
 **Written for the FRC 3824 (HVA) team, can be used elsewhere**
 
-*For specifics, and documentation:* [*Wiki*](https://github.com/bogogion/NACV/wiki)
-
 <h2 align="center">Todo:</h2>
 
 * [Hardware] Finish design for central control hub for interfacing 4 cameras to RoboRIO / PDH
 * [Hardware] Build central control hub and publish schematics, documentation, parts, and pcb.
+<<<<<<< HEAD
 * [Camera]   Figure out how to interface the Pi Camera 3 with V4L2 (I suspect just update kernel on the Pi)
 * [Camera]   Test all 3 cameras under one code.
+=======
+>>>>>>> 8fa2ff9 (quick update)
 * [Camera]   Find the best settings for each camera with both low & high light conditions. Save it a setting file
-* [Code]     There were some issues with settings.
+* [Code]     Rewrite all camera code in libcamera C++ to support the newer cameras.
 * [Code]     Finish writing calbibration code, the equations for it already are written.
 * [Code]     Write script to install the auto-start service (systemd).
+<<<<<<< HEAD
 * [Math]     Figure out object detection from scratch if we have time. (maybe? apriltags are being used anyways)
 * [Math]     Figure out pose for AprilTags.
 
@@ -48,3 +50,8 @@ Until further work is done consider most if not all of the documentation to be o
 * Robo Rio
     * Takes data from CCH
     * Interprets and acts on that data in the Java code
+=======
+* [Code]     Figure out multiprocessing for faster apriltag processing
+* [Math]     Figure out object detection from scratch if we have time. (maybe? apriltags are being used anyways)
+* [Math]     Figure out pose for AprilTags.
+>>>>>>> 8fa2ff9 (quick update)

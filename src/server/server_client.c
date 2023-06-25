@@ -1,4 +1,5 @@
 #include "server_client.h"
+#include "../core/shared.h"
 #include <string.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -7,6 +8,8 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <arpa/inet.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
 
 char buf[MAX_MES_SIZE];
 s_packet G_packet;

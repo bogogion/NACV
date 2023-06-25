@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "processing.h"
-
+#include "../camera/camera.h"
+#include "../core/shared.h"
 
 /* Generates real stride based off alignment */
 int generate_stride(int width, unsigned int alignment)
@@ -20,17 +21,20 @@ void convert_rgb24_proper(int width, int height, int stride, uint8_t *inbuf, ima
 
 	register int y;
 	register int x;
+	int r, g, b;
+
 
 	/* Conversion is (r + g + b)/3 */
 	for(y = 0; y < height; y++)
 	{
 		for(x = 0; x < width; x++)
 		{
-			int r = inbuf[y*(width*3) + 3*x+0];
-			int g = inbuf[y*(width*3) + 3*x+1];
-			int b = inbuf[y*(width*3) + 3*x+2];
+			r = inbuf[y*(width*3) + 3*x+0];
+			g = inbuf[y*(width*3) + 3*x+1];
+			b = inbuf[y*(width*3) + 3*x+2];
 
-			im->buf[y*stride + x] = ((r + g + b)/3);
+			/* Division trick, faster by a couple ms */
+			im->buf[y*stride + x] = ((r + g + b) * 342 >> 10);
 		}
 	}
 }
@@ -52,4 +56,33 @@ void destroy_image_u8(image_u8_t *im)
 {
 	free(im->buf);
 	free(im);
+}
+
+void create_apriltag_stack(struct apriltag_stack *astack, int width, int height)
+{
+	astack->im = create_image_u8(width, height, generate_stride(width,DEFAULT_ALIGNMENT_U8));
+	astack->tf = tag16h5_create();
+	astack->td = apriltag_detector_create();
+
+	/* Setup the detector */
+	apriltag_detector_add_family(astack->td,astack->tf);
+}
+
+void clean_apriltag_stack(struct apriltag_stack *astack)
+{
+	destroy_image_u8(astack->im);
+	tag16h5_destroy(astack->tf);
+	apriltag_detector_destroy(astack->td);
+}
+
+void launch_processes()
+{
+	char command[256];
+
+	for(int i = 0; i < PROCESSORS; i++)
+	{
+		sprintf(command, "nacv-processor %i nacv_data %i nacv_ctrl",i,SIZE);
+		system(command);
+		memset(command,0,256);
+	}
 }

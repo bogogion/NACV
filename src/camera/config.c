@@ -197,3 +197,76 @@ int set_apriltag_setting(apriltag_detector_t *td, char *setting_name, char *valu
 
 
 }
+
+/* Definitions of Camera 1 Profile 1 (Defaults) */
+
+/* User Controls */
+uint32_t c1_1user_settings[9][2] =
+{
+        {0x980900, 50},      // Brightness                0-100
+        {0x980901, 0},       // Contrast                  -100-100
+ 	{0x980902, 0},       // Saturation                -100-100
+        {0x98090e, 1000},    // Red Balance               1-7999
+        {0x98090f, 1000},    // Blue Balance              1-7999
+        {0x98091b, 0},       // Sharpness                 -100-100
+ 	{0x98091f, 0},       // Color Effects             0-15 (menu)
+ 	{0x980922, 0},       // Rotation                   0-360 (90 step)
+	{0x98092a, 32896}    // CBCR Color Effects        0-65535
+};
+
+/* Camera Controls */
+uint32_t c1_1camera_settings[9][2] =
+{
+        {0x9a0901, 0},       // Auto Exposure             0 (Auto) 1 (Manual)
+        {0x9a0902, 1000},    // Exposure Time             1-10000
+        {0x9a0913, 12},      // Auto Exposure Bias        0-24 (menu)
+        {0x9a0914, 1},       // White Balance Auto Preset 0-10 (menu)
+        {0x9a0916, 0},       // Image Stabilization       0-1 (bool)
+        {0x9a0917, 0},       // Iso Sensitivity           0-4 (menu)
+        {0x9a0918, 1},       // Iso Sensitivity Auto      0 (Manual) 1 (Auto)
+        {0x9a0919, 0},       // Exposure Metering Mode    0-3 (menu)
+        {0x9a091a, 0}        // Scene Mode                0, 8, 11 (menu)
+};
+
+uint32_t c2_1user_settings[4][2] =
+{
+	{0x980900,133},
+	{0x980901,5},
+	{0x980902,83},
+	{0x98091b,40}
+};
+
+uint32_t c2_1camera_settings[1][2] =
+{
+	{0x9a0901,3}
+};
+
+void ssfp_helper(uint32_t user[][2], uint32_t cam[][2], int user_size, int camera_size)
+{
+	int i;
+	for(i = 0; i < user_size; i++)
+	{
+		set_camera_settings(ID_CLASS_USER, user[i][0], user[i][1]);
+	}
+	
+	for(i = 0; i < camera_size; i++)
+	{
+		set_camera_settings(ID_CLASS_CAMERA, cam[i][0], cam[i][1]);
+	}
+}
+
+void set_settings_from_profile(uint8_t profile)
+{
+	switch(profile)
+	{
+		case PROFILE_C1_1_ID:
+			/* Camera 1 Profile 1 */
+			ssfp_helper(c1_1user_settings, c1_1camera_settings, PROFILE_C1_1U_SIZE, PROFILE_C1_1C_SIZE);
+			break;
+		case PROFILE_C2_1_ID:
+			ssfp_helper(c2_1user_settings, c2_1camera_settings, PROFILE_C2_1U_SIZE, PROFILE_C2_1C_SIZE);
+			break;
+		default:
+			printf("No profile selected for camera. Defaults used.\n");
+	}
+}

@@ -32,4 +32,5 @@ void update_packet(int id, float dist, float angle);
 void *thread_function(void *vargp);
 void init_server(char *address, int port);
 void send_message(s_packet packet, int sock_fd, struct sockaddr_in server_address, struct sockaddr_in client_address); /* Sends message to client */
+void update_shm(int fd, int size);
 #endif
