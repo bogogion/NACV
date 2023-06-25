@@ -2,7 +2,7 @@
 
 <p align="center">Native AprilTag Computer Vision system written in C</p>
 
-<p align="center">**Written by Zane Maples for the 3824 FRC Team (RoHawktics), can be used elsewhere**</p>
+<p align="center"><b>Written by Zane Maples for the 3824 FRC Team (RoHawktics), can be used elsewhere</b></p>
 
 <h2 align="center">Info</h2>
 
