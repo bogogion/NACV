@@ -81,7 +81,7 @@ void launch_processes()
 
 	for(int i = 0; i < PROCESSORS; i++)
 	{
-		sprintf(command, "nacv-processor %i nacv_data %i nacv_ctrl",i,SIZE);
+		sprintf(command, "nacv-processor %i nacv_data %i nacv_ctrl &",i,SIZE);
 		system(command);
 		memset(command,0,256);
 	}

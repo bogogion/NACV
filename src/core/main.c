@@ -35,11 +35,12 @@ int main(int argc, char *argv[])
 	BUF_TYPE = USERPTR;
 	struct calibration_data cdata;
 	
+	int sfd = shm_open("nacv_ctrl",O_CREAT | O_RDWR, S_IRWXU);	
+	ftruncate(sfd, sizeof(struct data_share));
+
 	/* Default camera device is video0 */
 	int fd = init_everything(CAMERA_WIDTH,CAMERA_HEIGHT,BUF_TYPE);
 
-	int sfd = shm_open("nacv_ctrl",O_CREAT | O_RDWR, S_IRWXU);	
-	ftruncate(sfd, sizeof(struct data_share));
 	struct data_share *datashare;
 	datashare = mmap(NULL, sizeof(struct data_share), PROT_READ | PROT_WRITE, MAP_SHARED, sfd, 0);
 
@@ -69,8 +70,9 @@ int main(int argc, char *argv[])
 	/* Send kill signal to child processors */
 	for(int i = 0; i < PROCESSORS; i++)
 	{
-		datashare->processes[i] = KILL;		
+		kill(datashare->data[i].meta.pid, SIGTERM);		
 	}
+
 	munmap(datashare, sizeof(struct data_share));
 	close_cam(fd);
 	return 0;
