@@ -66,6 +66,8 @@ void create_apriltag_stack(struct apriltag_stack *astack, int width, int height)
 
 	/* Setup the detector */
 	apriltag_detector_add_family(astack->td,astack->tf);
+	astack->td->quad_decimate = 2.0;
+
 }
 
 void clean_apriltag_stack(struct apriltag_stack *astack)

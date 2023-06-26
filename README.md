@@ -29,13 +29,14 @@ code, and hardware will be posted within this repo.
 
 <h2 align="center">Todo:</h2>
 
-* [Code] Write support for full options/configuration with cJSON
-* [Code] Write interfacing code / library for NACV and RoboRIO (either direct socket or NT3/4)
-* [Camera] Test with Pi Camera V1 until it works (may require patching of kernel)
-* [Camera] Wait and get the 0V9281 Monochrome sensor and fine tune program for that.
-* [Hardware] Develop/Print a case for Raspberry Pi 3 B/B+
-* [Hardware] Develop an interface board for PDH to power 4 Pis.
-* [Hardware] (MAYBE) Finish CCU for the Pis (built in ethernet switch)
+* [Code] Write support for full options/configuration with cJSON [Misc]
+* [Code] Write interfacing code / library for NACV and RoboRIO (either direct socket or NT3/4) [Comm]
+* [Code] Rewrite AprilTag 3.2 to support GPU acceleration on Raspberry Pi [Performance]
+* [Camera] Test with Pi Camera V1 until it works (may require patching of kernel) [Performance]
+* [Camera] Wait and get the 0V9281 Monochrome sensor and fine tune program for that. [Performance]
+* [Hardware] Develop/Print a case for Raspberry Pi 3 B/B+ [Custom]
+* [Hardware] Develop an interface board for PDH to power 4 Pis. [Custom]
+* [Hardware] (MAYBE) Finish CCU for the Pis (built in ethernet switch) [Potential]
 
 <h2 align="center">System Diagram</h2>
 

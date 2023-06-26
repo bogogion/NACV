@@ -10,7 +10,7 @@
 #define PROCESSING          1 << 5  /* 00100000 */
 #define KILL                0xFF    /* 11111111 */
 
-#define PROCESSORS          2       /* Number of processors needed at runtime */
+#define PROCESSORS          4       /* Number of processors needed at runtime */
 
 /* TODO: figure out pose information */
 typedef struct data
