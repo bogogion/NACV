@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 	/* Fill in our information */
 	identity = atoi(argv[1]);
 	memcpy(shm_path, argv[2], strlen(argv[2]));
-	//size = atoi(argv[3]);
+	size = atoi(argv[3]);
 	memcpy(ctrl_path, argv[4], strlen(argv[4]));
 
 	/* Setup access to our memory */

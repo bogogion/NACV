@@ -40,22 +40,9 @@ code, and hardware will be posted within this repo.
 <h2 align="center">System Diagram</h2>
 
 * Code
-    * /src/core = main file and test/debug files
-    * /src/camera = camera code, processing code, and config for camera
-    * /src/math = math for detections
-    * /src/server = server code
-    * /config/test.camcfg = test config for camera settings
+    * Multi-processing
 * Rasberry PI
     * Computer Vision code, written in C.
-* Central Control Hub (CCH)
-    * Takes in input from 4 pis. (Via Ethernet)
-    * Packages this data into an ethernet frame to be sent back to RoboRIO.
-    * Also provides power for all 4 Pis.
 * Robo Rio
-    * Takes data from CCH
+    * Takes data from PI
     * Interprets and acts on that data in the Java code
-=======
-* [Code]     Figure out multiprocessing for faster apriltag processing
-* [Math]     Figure out object detection from scratch if we have time. (maybe? apriltags are being used anyways)
-* [Math]     Figure out pose for AprilTags.
->>>>>>> 8fa2ff9 (quick update)
