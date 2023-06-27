@@ -1,7 +1,0 @@
-{
-  "nthreads": 1,
-  "quad_dec": 0.0,
-  "quad_sig": 0.0,
-  "refine"  : false,
-  "decode"  : 0.2
-}
