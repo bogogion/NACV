@@ -27,6 +27,7 @@ code, and hardware will be posted within this repo.
 * 0V9281             - For best performance with AprilTags Monochrome + Global Shutter is recommended.
 
 <h2 align="center">Needs To Be Tested</h2>
+
 * RaspberryPi 4 - This is a low priority, I suspect that performance will be similar to Pi 3
 * Orange Pi 5   - If ported correctly could provide insane performance
 
