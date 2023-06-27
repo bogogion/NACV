@@ -2,13 +2,14 @@
 #include <stdint.h>
 
 #ifndef SHARED_MULTIP
-#define SHRRED_MULTIP
+#define SHARED_MULTIP
 
 #define _M_READY_TO_PROCESS 1 << 7  /* 10000000 */   
 #define _C_READY_TO_PROCESS 1       /* 00000001 */
 #define _C_DATA_SET         1 << 4  /* 00010000 */
 #define PROCESSING          1 << 5  /* 00100000 */
 
+#define CAMERA_ID           1       /* ID of the camera, user settable.           */
 #define PROCESSORS          4       /* Number of processors needed at runtime     */
 #define MAX_TAGS            10      /* Maximum tags that data can be collected on */
 
