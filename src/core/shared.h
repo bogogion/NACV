@@ -8,27 +8,28 @@
 #define _C_READY_TO_PROCESS 1       /* 00000001 */
 #define _C_DATA_SET         1 << 4  /* 00010000 */
 #define PROCESSING          1 << 5  /* 00100000 */
-#define KILL                0xFF    /* 11111111 */
 
-#define PROCESSORS          4       /* Number of processors needed at runtime */
+#define PROCESSORS          4       /* Number of processors needed at runtime     */
+#define MAX_TAGS            10      /* Maximum tags that data can be collected on */
 
 /* TODO: figure out pose information */
 typedef struct data
 {
 	struct metadata
 	{
-		uint8_t    identity;    /* Custom ID given to process           */
-		int32_t    pid;         /* PID of process                        */
-		uint8_t    tags_found;  /* Amount of tags found in detection     */
+		uint8_t    identity;    /* Custom ID given to process        */
+		int32_t    pid;         /* PID of process                    */
+		uint8_t    tags_found;  /* Amount of tags found in detection */
 	} meta;
 
+	/* This struct is used for sending data. Make sure it aligns to multiples of 4 bytes */
 	struct aprildata
 	{
-		float      dist[10];    /* Distance from tag                     */
-		uint32_t   area[10];    /* Area in pixels of tag                 */
-		uint8_t    id[10];      /* ID of the tag                         */
-		float      angle[10];   /* Angle from the camera (WIP)           */
-	} aprild;
+		float      dist;        /* Distance from tag                 */
+		uint32_t   area;        /* Area in pixels of tag             */
+		uint32_t   id;          /* ID of the tag                     */
+		float      angle;       /* Angle from the camera (WIP)       */
+	} aprild[MAX_TAGS];
 } full_process_data;
 
 struct data_share

@@ -40,17 +40,16 @@ void xioctl(int fh, int request, void *arg)
 struct v4l2_control         user_ctrl;
 struct v4l2_ext_control     single_ctrl;
 struct v4l2_ext_controls    cam_ctrl;
-struct v4l2_format	    format;
-struct v4l2_buffer	    v_buf;
+struct v4l2_format          format;
+struct v4l2_buffer          v_buf;
 struct v4l2_requestbuffers  v_request;
-enum v4l2_buf_type	    v_type;
-fd_set			    fds;
-struct timeval		    tv;
-int			    r, fd = -1, shfd, shfd_ctrl, increment;
-struct data_share *datas;
-unsigned int		    i, n_buffers;
+enum v4l2_buf_type          v_type;
+fd_set                      fds;
+struct timeval              tv;
+int                         r, fd = -1, shfd, shfd_ctrl, increment;
+struct data_share           *datas;
+unsigned int                i, n_buffers;
 static struct buffer        *buffers;
-char 			    out_name[255];
 enum buf_types              buf_type_e;
 
 void set_camera_settings(uint32_t ctrl_class, uint32_t id, int32_t value)

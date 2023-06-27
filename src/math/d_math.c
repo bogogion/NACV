@@ -45,8 +45,8 @@ void gen_exponential_data(double c[5][2], struct calibration_data *cdata)
 
 	/* find our sums needed for equation */
 	double xy_sum        = 0;
-	double x_sum	     = 0;
-	double y_sum 	     = 0;
+	double x_sum	       = 0;
+	double y_sum 	       = 0;
 	double x_squared_sum = 0;
 
 	for(int i = 0; i < n; i++)
@@ -76,4 +76,3 @@ float distance_exponential(double area, struct calibration_data cdata)
 {
 	return(cdata.a*pow(cdata.b,area));
 }
-

@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <signal.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/mman.h>
@@ -23,6 +24,7 @@
 #include <apriltag/common/zarray.h>
 #include <apriltag/tag16h5.h>
 
+uint8_t               run = 1;
 int                   identity; /* Identity of process */
 int                   sfd, cfd;
 int                   size = SIZE;
@@ -33,12 +35,16 @@ struct data_share     *ds;
 unsigned char         *control_byte;
 struct apriltag_stack april_stack;
 
+/* Handles signal */
+void sigHandler(int useless)
+{ run = 0; }
+
 void mainloop()
 {
 	*control_byte = _C_READY_TO_PROCESS;
 	int tags, i;
 
-	while(1)
+	while(run)
 	{
 		switch(*control_byte)
 		{
@@ -61,8 +67,8 @@ void mainloop()
 						/* TODO: finish processing */
 						if(april_stack.det->decision_margin > DECISION_THRESHOLD)
 						{
-							ds->data[identity].aprild.id[i] = april_stack.det->id;
-							ds->data[identity].aprild.area[i] = grab_area(april_stack.det->p);
+							ds->data[identity].aprild[i].id = april_stack.det->id;
+							ds->data[identity].aprild[i].area = grab_area(april_stack.det->p);
 						}
 					}
 				}
@@ -71,8 +77,6 @@ void mainloop()
 
 				*control_byte = _C_DATA_SET;
 				break;
-			case KILL:
-				return;
 		}
 	}
 }
@@ -109,6 +113,8 @@ int main(int argc, char *argv[])
 	/* Setup AprilTag */
 	create_apriltag_stack(&april_stack, CAMERA_WIDTH, CAMERA_HEIGHT);	
 	
+	/* Run mainloop and signal handling */
+	signal(SIGTERM, sigHandler);
 	mainloop();
 
 	/* Cleanup */
