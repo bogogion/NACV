@@ -20,12 +20,15 @@ code, and hardware will be posted within this repo.
 
 <h2 align="center">Currently Supported Hardware</h2>
 
-* RaspberryPi 3 B/B+
-* RaspberryPi 2 will be tested
-* RaspberryPi 4 currently has not been tested. (note all Pi's must support V4L2 drivers or *legacy* camera stack)
-* Pi Camera 1 (currently has issues with mode setting)
-* 0V9281 (any camera with the sensor) will be officially supported once testing begins
+* RaspberryPi 3 B/B+ - Officially Supported and tested on this platform
+* RaspberryPi 2      - mileage may vary, even at high decoding and 4 processes only 20-25 FPS was processable
+* RaspberryPi 4      - currently has not been tested. (note all Pi's must support V4L2 drivers or *legacy* camera stack)
+* Pi Camera 1        - Officially Supported, however sensor mode must be manually set to 640x480 (Image with patched drivers will be released)
+* 0V9281             - For best performance with AprilTags Monochrome + Global Shutter is recommended.
 
+<h2 align="center">Needs To Be Tested</h2>
+* RaspberryPi 4 - This is a low priority, I suspect that performance will be similar to Pi 3
+* Orange Pi 5   - If ported correctly could provide insane performance
 
 <h2 align="center">Todo:</h2>
 
