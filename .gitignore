@@ -5,6 +5,7 @@
 *.so.*
 vgcore*
 nacv
+nacv-processor
 test
 test/*
 debug_*
