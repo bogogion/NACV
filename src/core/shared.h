@@ -24,8 +24,11 @@ typedef struct data
 	} meta;
 
 	/* This struct is used for sending data. Make sure it aligns to multiples of 4 bytes */
+	/* This struct is passed directly into the server to be passed to reduce latency     */
+	/* allowing for better data transfer. That's why camera id is included               */
 	struct aprildata
 	{
+		uint32_t   camera_id;   /* ID of Camera                      */
 		float      dist;        /* Distance from tag                 */
 		uint32_t   area;        /* Area in pixels of tag             */
 		uint32_t   id;          /* ID of the tag                     */

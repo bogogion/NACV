@@ -256,8 +256,9 @@ void mainloop_shm()
 		switch(datas->processes[i])
 		{
 			case _C_READY_TO_PROCESS:
-				/* Called once a process is setup and ready */
+				/* Called once a process is setup or if it doesn't detect anything */
 				datas->processes[i] = _M_READY_TO_PROCESS;
+				printf("Nothing found, frame %i\n",increment++);
 				xioctl(fd, VIDIOC_QBUF, &v_buf);
 				return;
 			case _C_DATA_SET:

@@ -42,7 +42,7 @@ void sigHandler(int useless)
 void mainloop()
 {
 	*control_byte = _C_READY_TO_PROCESS;
-	int tags, i;
+	int tags, i, set;
 
 	while(run)
 	{
@@ -69,13 +69,27 @@ void mainloop()
 						{
 							ds->data[identity].aprild[i].id = april_stack.det->id;
 							ds->data[identity].aprild[i].area = grab_area(april_stack.det->p);
+							set++;
 						}
 					}
+				} else
+				{
+					/* If nothing found, return out to save processing */
+					zarray_destroy(detections);
+					*control_byte = _C_READY_TO_PROCESS;
+					break;
 				}
 
 				zarray_destroy(detections);
+				/* Only set if we actually set something */
+				if(set)
+				{
+					*control_byte = _C_DATA_SET;
+					set = 0;
+					break;
+				}
 
-				*control_byte = _C_DATA_SET;
+				*control_byte = _C_READY_TO_PROCESS;
 				break;
 		}
 	}
