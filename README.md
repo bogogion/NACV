@@ -14,6 +14,9 @@ will be to support this board and camera.
 Eventually an official image will be released with patched kernel drivers to allow for higher framerate. A case is currently being produced
 alongside a custom LED board to form a complete custom vision unit.
 
+The software will also be built to support a custom version of AprilTag still in the works. Once all of these components are completed
+all files will be public.
+
 The project is being fundamentally rewritten to support complete multiprocessing of frames for accelerated peformance. This project will also be a 
 *strictly* AprilTag vision system for the time being, however a headless (AprilTag less) version will be released to be used with OpenCV and other
 vision pipelines.
