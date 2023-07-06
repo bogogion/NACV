@@ -50,7 +50,6 @@ int                         r, fd = -1, shfd, shfd_ctrl, increment;
 struct data_share           *datas;
 unsigned int                i, n_buffers;
 static struct buffer        *buffers;
-enum buf_types              buf_type_e;
 
 void set_camera_settings(uint32_t ctrl_class, uint32_t id, int32_t value)
 {
@@ -67,21 +66,10 @@ void set_camera_settings(uint32_t ctrl_class, uint32_t id, int32_t value)
 	xioctl(fd, VIDIOC_S_EXT_CTRLS, &cam_ctrl);
 }
 
-int init_everything(int width, int height, enum buf_types btype)
+int init_everything(int width, int height)
 {
 	int fd = init_cam("/dev/video0",width,height);
-	buf_type_e = btype;
-	switch(buf_type_e)
-	{	case MMAP:
-			init_mmap();
-			break;
-		case USERPTR:
-			init_shm(width * height * 3);
-			break;
-		default:
-			printf("NO BUFFER TYPE SPECIFIED!\n");
-			break;
-	}
+	init_shm(width * height * 3);
 	return fd;
 }
 
@@ -136,94 +124,6 @@ void cleanup_shm(unsigned int buffer_size)
 {
 	munmap(buffers[0].start,buffer_size);
 	shm_unlink("nacv_data");
-}
-
-/* Create userpointers because that's fast or sum!! */
-void init_userp(unsigned int buffer_size)
-{
-	CLEAR(v_request);
-
-	/* Doing several buffers with userptr causes a crash with V4L2 */
-	v_request.count = 1;
-	v_request.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-	v_request.memory = V4L2_MEMORY_USERPTR;
-
-	/* Check if the jawn work */
-	if(-1 == ioctl(fd, VIDIOC_REQBUFS, &v_request))
-	{
-		if(EINVAL == errno)
-		{
-			printf("DEVICE DOES NOT SUPPORT USERPOINTER, EXITING!\n");
-		} else {
-			return;
-		}
-	}
-
-	buffers = calloc(1, sizeof(*buffers));
-	
-	/* Intiliaze pointers */
-	buffers[0].length = buffer_size;
-	buffers[0].start = malloc(buffer_size);
-
-	/* Queue buffers */
-	CLEAR(v_buf);
-	v_buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-	v_buf.memory = V4L2_MEMORY_USERPTR;
-	v_buf.index = 0;
-	v_buf.m.userptr = (unsigned long)buffers[0].start;
-	v_buf.length = buffer_size;
-	xioctl(fd,VIDIOC_QBUF,&v_buf);
-	
-}
-/* Cleanup buffers or you have big memory leak no goody!! */
-void cleanup_userp()
-{
-	free(buffers[0].start);
-	free(buffers);
-}
-
-/* Create a 4 buffer memory map of the device */
-
-void init_mmap()
-{
-	CLEAR(v_request);
-	v_request.count = 4;
-	v_request.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-	v_request.memory = V4L2_MEMORY_MMAP;
-	xioctl(fd, VIDIOC_REQBUFS, &v_request);
-	
-	buffers = calloc(v_request.count, sizeof(*buffers));
-	
-	/* Initialize buffers and assign them */
-	for(n_buffers = 0; n_buffers < v_request.count; n_buffers++)
-	{
-		CLEAR(v_buf);
-
-		v_buf.type   = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-		v_buf.memory = V4L2_MEMORY_MMAP;
-		v_buf.index  = n_buffers;
-		
-		xioctl(fd, VIDIOC_QUERYBUF, &v_buf);
-
-		buffers[n_buffers].length = v_buf.length;
-		buffers[n_buffers].start = v4l2_mmap(NULL, v_buf.length,
-						     PROT_READ | PROT_WRITE,
-						     MAP_SHARED, fd, v_buf.m.offset);
-		if(MAP_FAILED == buffers[n_buffers].start)
-		{
-			perror("Memory Map Failure! ");
-			exit(EXIT_FAILURE);
-		}
-	}
-	
-	for(i = 0; i < n_buffers; i++)
-	{
-		CLEAR(v_buf);
-		v_buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;	
-		v_buf.memory = V4L2_MEMORY_MMAP;
-		v_buf.index = i;
-		xioctl(fd, VIDIOC_QBUF, &v_buf);
-	}
 }
 
 /* Mainloop for shared memory system. Handles all calls accordingly. */
@@ -326,19 +226,8 @@ void close_cam(int fd)
 	/* User warning*/
 	printf("Closing camera, goodbye cruel world!\n");
 
-	/* Close mmap */
-	switch(buf_type_e)
-	{
-		case MMAP:
-			for(i = 0; i < n_buffers; i++)
-			{
-				v4l2_munmap(buffers[i].start,buffers[i].length);
-			}
-			break;
-		case USERPTR:
-			cleanup_shm(CAMERA_WIDTH * CAMERA_HEIGHT * 3);
-			break;
-	}
+	cleanup_shm(CAMERA_WIDTH * CAMERA_HEIGHT * 3);
+	
 	sleep(1);
 
 	v4l2_close(fd);

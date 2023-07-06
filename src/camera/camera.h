@@ -17,9 +17,6 @@
 
 #define CLEAR(x) memset(&(x), 0, sizeof(x))
 
-enum buf_types
-{MMAP,USERPTR};
-
 struct buffer {
 	void      *start;
 	size_t    length;
@@ -27,13 +24,10 @@ struct buffer {
 
 void init_shm(unsigned int buffer_size);
 void cleanup_shm(unsigned int buffer_size);
-void init_userp(unsigned int buffer_size);
-void cleanup_userp();
 void set_camera_settings(uint32_t ctrl_class, uint32_t id, int32_t value); /* EXT Call */
 void xioctl(int fh, int request, void *arg);
 void mainloop_shm();
-int init_everything(int width, int height, enum buf_types btype);
-void init_mmap(); 
+int init_everything(int width, int height);
 void set_cam_settings(int width, int height, int pformat); /* Used internally in init_cam */
 int init_cam(char *dev_name, int width, int height); /* Return file descriptor */
 void start_stream(int fd);

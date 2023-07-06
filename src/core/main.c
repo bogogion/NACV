@@ -4,7 +4,6 @@
 #include <apriltag/common/image_u8.h>
 #include "../camera/processing.h"
 #include "../camera/camera.h"
-#include "../camera/config.h"
 #include "../server/server_client.h"
 #include "shared.h"
 #include <stdio.h>
@@ -23,7 +22,6 @@
 
 int run = 1;
 
-enum buf_types BUF_TYPE;
 /* Handles Ctrl + C end of loop */
 void intHandler(int useless)
 {
@@ -32,14 +30,13 @@ void intHandler(int useless)
 
 int main(int argc, char *argv[])
 {
-	BUF_TYPE = USERPTR;
 	struct calibration_data cdata;
 	
 	int sfd = shm_open("nacv_ctrl",O_CREAT | O_RDWR, S_IRWXU);	
 	ftruncate(sfd, sizeof(struct data_share));
 
 	/* Default camera device is video0 */
-	int fd = init_everything(CAMERA_WIDTH,CAMERA_HEIGHT,BUF_TYPE);
+	int fd = init_everything(CAMERA_WIDTH,CAMERA_HEIGHT);
 
 	struct data_share *datashare;
 	datashare = mmap(NULL, sizeof(struct data_share), PROT_READ | PROT_WRITE, MAP_SHARED, sfd, 0);
