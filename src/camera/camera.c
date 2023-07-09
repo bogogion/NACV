@@ -43,6 +43,7 @@ struct v4l2_ext_controls    cam_ctrl;
 struct v4l2_format          format;
 struct v4l2_buffer          v_buf;
 struct v4l2_requestbuffers  v_request;
+struct v4l2_queryctrl       v_ctrlq;
 enum v4l2_buf_type          v_type;
 fd_set                      fds;
 struct timeval              tv;
@@ -50,6 +51,20 @@ int                         r, fd = -1, shfd, shfd_ctrl, increment;
 struct data_share           *datas;
 unsigned int                i, n_buffers;
 static struct buffer        *buffers;
+
+int check_for_sensormode()
+{
+	v_ctrlq.id = 0x009819e0; /* sensor mode */
+
+	xioctl(fd, VIDIOC_QUERYCTRL, &v_ctrlq);
+
+	if(v_ctrlq.flags == V4L2_CTRL_FLAG_DISABLED)
+	{
+		printf("Warning! No V4L2 PiCamera Sensor Mode control exposed! Please use modified kernel for best performance. Driver forced at 1920x1080 mode.\n");
+		return 0;
+	}
+	return 1;
+}
 
 void set_camera_settings(uint32_t ctrl_class, uint32_t id, int32_t value)
 {

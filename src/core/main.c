@@ -38,12 +38,17 @@ int main(int argc, char *argv[])
 	/* Default camera device is video0 */
 	int fd = init_everything(CAMERA_WIDTH,CAMERA_HEIGHT);
 
+	/* Check for our magic control */
+	if(check_for_sensormode())
+	{
+		set_camera_settings(ID_CLASS_USER,0x009819e0,7);
+	}
+
 	struct data_share *datashare;
 	datashare = mmap(NULL, sizeof(struct data_share), PROT_READ | PROT_WRITE, MAP_SHARED, sfd, 0);
 
 	/* Start server */
-	pthread_t thread;
-	int iret1;
+	pthread_t thread;	int iret1;
 	iret1 = pthread_create(&thread,NULL,thread_function,NULL);
 
 	start_stream(fd);

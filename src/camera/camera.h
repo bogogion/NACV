@@ -22,6 +22,7 @@ struct buffer {
 	size_t    length;
 };
 
+int check_for_sensormode(); /* returns true or false if sensor mode is supported (if the modified kernel is used!) */
 void init_shm(unsigned int buffer_size);
 void cleanup_shm(unsigned int buffer_size);
 void set_camera_settings(uint32_t ctrl_class, uint32_t id, int32_t value); /* EXT Call */

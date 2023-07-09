@@ -17,11 +17,11 @@ int generate_stride(int width, unsigned int alignment)
 
 void convert_rgb24_proper(int width, int height, int stride, uint8_t *inbuf, image_u8_t *im)
 {
-	/* Conversion, to my knowledge, is only applicable to 3-byte RGB format, such as RGB3 (rgb24)*/
+	/* Converts rgb24 down to greyscale */
 
-	register int y;
-	register int x;
-	int r, g, b;
+	int y;
+	int x;
+	register int r, g, b;
 
 
 	/* Conversion is (r + g + b)/3 */

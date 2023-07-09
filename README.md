@@ -21,6 +21,11 @@ The project is being fundamentally rewritten to support complete multiprocessing
 *strictly* AprilTag vision system for the time being, however a headless (AprilTag less) version will be released to be used with OpenCV and other
 vision pipelines.
 
+<h2 align="center">Custom AprilTag</h2>
+Made to work with a custom AprilTag implementation
+
+* Included as a submodule
+* [Link](https://github.com/bogogion/NACV-apriltag)
 
 <h2 align="center">Currently Supported Hardware</h2>
 
@@ -33,7 +38,6 @@ vision pipelines.
 
 * [Code] Write support for full options/configuration with cJSON [Misc]
 * [Code] Write Java/C++ library [RoboRIO]
-* [Code] Re-write custom AprilTag implementation for better streaming [Performance]
 * [Hardware] Develop/Print a case for Raspberry Pi 3 B/B+ [Custom]
 * [Hardware] Develop an interface board for PDH to power 4 Pis. [Custom]
 * [NACV] Post .stl files for case and kicad pcb project for ledboard [Misc]

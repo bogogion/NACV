@@ -13,7 +13,7 @@ struct apriltag_stack
 	/* Holds all memory required for one detection */
 	/* This helps eliminate mallocs and memcpys    */
 	image_u8_t *im;
-	
+		
 
 	apriltag_detector_t *td;
 	apriltag_family_t *tf;
