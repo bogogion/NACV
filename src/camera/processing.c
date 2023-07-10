@@ -1,6 +1,7 @@
 #include <apriltag/common/image_u8.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "processing.h"
 #include "../camera/camera.h"
 #include "../core/shared.h"
@@ -68,11 +69,20 @@ void create_apriltag_stack(struct apriltag_stack *astack, int width, int height)
 	apriltag_detector_add_family(astack->td,astack->tf);
 	astack->td->quad_decimate = 2.0;
 
+	/* Decimation buffer decided off of quad_decimate */
+	assert(astack->td->quad_decimate >= 2.0);
+
+	int factor = (int)astack->td->quad_decimate;
+	int swidth = 1 + (width - 1)/factor;
+	int sheight = 1 + (height - 1)/factor;
+
+	astack->decim = create_image_u8(swidth, sheight, generate_stride(swidth,DEFAULT_ALIGNMENT_U8));
 }
 
 void clean_apriltag_stack(struct apriltag_stack *astack)
 {
 	destroy_image_u8(astack->im);
+	destroy_image_u8(astack->decim);
 	tag16h5_destroy(astack->tf);
 	apriltag_detector_destroy(astack->td);
 }

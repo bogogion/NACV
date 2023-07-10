@@ -42,7 +42,7 @@ void sigHandler(int useless)
 void mainloop()
 {
 	*control_byte = _C_READY_TO_PROCESS;
-	int tags, i, set;
+	int tags, i;
 
 	while(run)
 	{
@@ -53,7 +53,8 @@ void mainloop()
 
 				/* Setup our detection */
 				convert_rgb24_proper(CAMERA_WIDTH, CAMERA_HEIGHT, april_stack.im->stride, data, april_stack.im);
-				zarray_t *detections = apriltag_detector_detect(april_stack.td, april_stack.im);			
+				zarray_t *detections = apriltag_detector_detect(april_stack.td, april_stack.im, april_stack.decim, 
+																												DECISION_THRESHOLD, MAX_TAGS);			
 				
 				tags = zarray_size(detections);
 				ds->data[identity].meta.tags_found = tags;
@@ -65,12 +66,9 @@ void mainloop()
 						zarray_get(detections, i, &april_stack.det);
 
 						/* TODO: finish processing */
-						if(april_stack.det->decision_margin > DECISION_THRESHOLD)
-						{
-							ds->data[identity].aprild[i].id = april_stack.det->id;
-							ds->data[identity].aprild[i].area = grab_area(april_stack.det->p);
-							set++;
-						}
+						ds->data[identity].aprild[i].id = april_stack.det->id;
+						ds->data[identity].aprild[i].area = grab_area(april_stack.det->p);
+						
 					}
 				} else
 				{
@@ -81,15 +79,9 @@ void mainloop()
 				}
 
 				zarray_destroy(detections);
-				/* Only set if we actually set something */
-				if(set)
-				{
-					*control_byte = _C_DATA_SET;
-					set = 0;
-					break;
-				}
 
-				*control_byte = _C_READY_TO_PROCESS;
+				/* Only set if we actually set something */
+				*control_byte = _C_DATA_SET;
 				break;
 		}
 	}
