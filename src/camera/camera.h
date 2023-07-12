@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "../../lib/libv4l/include/libv4l2.h"
 #include "../math/d_math.h"
+#include "processing.h"
 
 #ifndef CAMERA_H
 #define CAMERA_H
@@ -28,6 +29,7 @@ void cleanup_shm(unsigned int buffer_size);
 void set_camera_settings(uint32_t ctrl_class, uint32_t id, int32_t value); /* EXT Call */
 void xioctl(int fh, int request, void *arg);
 void mainloop_shm();
+void apriltag_debug(struct apriltag_stack astack); /* Runs a single detection and quits */
 int init_everything(int width, int height);
 void set_cam_settings(int width, int height, int pformat); /* Used internally in init_cam */
 int init_cam(char *dev_name, int width, int height); /* Return file descriptor */

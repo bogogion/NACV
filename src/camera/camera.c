@@ -194,6 +194,35 @@ void mainloop_shm()
 	xioctl(fd, VIDIOC_QBUF, &v_buf);
 }
 
+void apriltag_debug(struct apriltag_stack astack)
+{	
+	do {
+		FD_ZERO(&fds);
+		FD_SET(fd, &fds);
+		 
+		/* Timeout. */
+		tv.tv_sec = 2;
+		tv.tv_usec = 0;
+
+		r = select(fd + 1, &fds, NULL, NULL, &tv);
+	} 
+	while ((r == -1 && (errno = EINTR)));
+        
+	if (r == -1) {
+		perror("select");
+		return;
+	}
+	xioctl(fd, VIDIOC_DQBUF, &v_buf);
+
+	/* Get detection */
+	convert_rgb24_proper(CAMERA_WIDTH,CAMERA_HEIGHT,astack.im->stride,(uint8_t*)buffers[0].start,astack.im);
+	zarray_t *detections = apriltag_detector_detect(astack.td,astack.im,astack.decim,DECISION_THRESHOLD,MAX_TAGS);
+
+	zarray_destroy(detections);
+
+	xioctl(fd, VIDIOC_QBUF, &v_buf);
+}
+
 void set_cam_settings(int width, int height, int pformat)
 {
 	format.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -218,7 +247,6 @@ void set_cam_settings(int width, int height, int pformat)
 		
 	}
 }
-
 int init_cam(char *dev_name, int width, int height)
 {
 	fd = v4l2_open(dev_name, O_RDWR | O_NONBLOCK, 0);
