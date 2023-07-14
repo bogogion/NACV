@@ -2,10 +2,7 @@
 #include <apriltag/apriltag.h>
 #include <apriltag/tag16h5.h>
 #include <apriltag/common/image_u8.h>
-#include "../camera/processing.h"
-#include "../camera/camera.h"
-#include "../server/server_client.h"
-#include "shared.h"
+#include "nacv.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
@@ -46,6 +43,9 @@ int main(int argc, char *argv[])
 
 	struct data_share *datashare;
 	datashare = mmap(NULL, sizeof(struct data_share), PROT_READ | PROT_WRITE, MAP_SHARED, sfd, 0);
+
+	/* Log our PID so that we can control this process later */
+	datashare->main_pid = getpid();
 
 	/* Start server */
 	pthread_t thread;	int iret1;

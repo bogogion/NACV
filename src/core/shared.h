@@ -1,4 +1,4 @@
-/* Defined structures and functions for multiprocessing of camera related functions. */
+/* Defined structures for multiprocessing of camera related functions. */
 #include <stdint.h>
 
 #ifndef SHARED_MULTIP
@@ -26,6 +26,7 @@ typedef struct data
 	/* This struct is used for sending data. Make sure it aligns to multiples of 4 bytes */
 	/* This struct is passed directly into the server to be passed to reduce latency     */
 	/* allowing for better data transfer. That's why camera id is included               */
+	
 	struct aprildata
 	{
 		uint32_t   camera_id;   /* ID of Camera                      */
@@ -38,6 +39,7 @@ typedef struct data
 
 struct data_share
 {
+	int32_t main_pid;	/* PID of main NACV process */
 	unsigned char processes[PROCESSORS];
 	full_process_data  data[PROCESSORS];
 };

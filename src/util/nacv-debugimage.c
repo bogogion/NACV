@@ -2,13 +2,10 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "../camera/camera.h"
-#include "../camera/processing.h"
-
+#include "../core/nacv.h"
 
 int main(int argc, char *argv[])
 {
-	char *devname = "/dev/video0";
 	int fd = init_everything(CAMERA_WIDTH, CAMERA_HEIGHT);
 
 	struct apriltag_stack astack;

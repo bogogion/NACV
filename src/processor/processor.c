@@ -6,11 +6,7 @@
    what you're doing! 
 */ 
 
-/* NACV related */
-#include "../camera/camera.h"
-#include "../camera/processing.h"
-#include "../math/d_math.h"
-#include "../core/shared.h"
+#include "../core/nacv.h"
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -115,6 +111,11 @@ int main(int argc, char *argv[])
 	/* Setup identifying information */
 	ds->data[identity].meta.pid      = getpid();
 	ds->data[identity].meta.identity = identity;
+
+	for(int i = 0; i < MAX_TAGS; i++)
+	{
+		ds->data[identity].aprild[i].camera_id = CAMERA_ID; // Placeholder 
+	}
 
 	/* Setup AprilTag */
 	create_apriltag_stack(&april_stack, CAMERA_WIDTH, CAMERA_HEIGHT);	

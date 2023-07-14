@@ -1,19 +1,20 @@
 CC = gcc
-SRCS = core/* camera/* math/* server/*
+SRCS = core/*.h camera/* math/* server/* config/*
+TARGET_SRC = core/main.c
+TARGET_CTRL_SRC = controller/nacv-controller.c
+TARGET_PROCESSOR_SRC = processor/processor.c
 LIB = -lapriltag -lm -lv4l2 -lpthread -lrt
 TARGET = nacv
-CFG_TARGET = ~/.config/NACV/cam.camcfg
-CFG_DIR = ~/.config/NACV
-CFG_ORG = ../config/test.camcfg
+TARGET_CTRL = nacv-controller
+TARGET_PROCESSOR = nacv-processor
 all: $(SRCS)
-	$(CC) $(SRCS) $(LIB) -O3 -o $(TARGET)
+	$(CC) $(SRCS) $(TARGET_SRC) $(LIB) -O3 -o $(TARGET) && \
+	$(CC) $(SRCS) $(TARGET_CTRL_SRC) $(LIB) -O3 -o $(TARGET_CTRL) && \
+	$(CC) $(SRCS) $(TARGET_PROCESSOR_SRC) $(LIB) -O3 -o $(TARGET_PROCESSOR)
 install: $(SRCS)
-	@$(CC) $(SRCS) $(LIB) -O3 -o $(TARGET) && \
-	sudo cp $(TARGET) /usr/bin/ && \
-	rm $(TARGET) && \
-	if ! [ -e $(CFG_DIR) ]; \
-		then mkdir $(CFG_DIR); \
-	fi; \
-	if ! [ -f $(CFG_TARGET) ]; \
-		then cp $(CFG_ORG) $(CFG_TARGET); \
-	fi;
+	@$(CC) $(SRCS) $(TARGET_SRC) $(LIB) -O3 -o $(TARGET) && \
+	$(CC) $(SRCS) $(TARGET_CTRL_SRC) $(LIB) -O3 -o $(TARGET_CTRL) && \
+	$(CC) $(SRCS) $(TARGET_PROCESSOR_SRC) $(LIB) -O3 -o $(TARGET_PROCESSOR) && \
+	mv $(TARGET) /usr/bin/ && \
+	mv $(TARGET_CTRL) /usr/bin && \
+	mv $(TARGET_PROCESSOR) /usr/bin 
