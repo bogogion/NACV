@@ -35,9 +35,10 @@ typedef struct ctrl_share
 
 	struct meta_ctrls
 	{
-		int team_number; /* Full team number                                */
-		int camera_id;   /* ID of the Camera (user defined)                 */
-		int port;        /* Port number, default 5805, only 5800-5810 valid */
+		int team_number;     /* Full team number                                */
+		int camera_id;       /* ID of the Camera (user defined)                 */
+		int port;            /* Port number, default 5805, only 5800-5810 valid */
+		int controller_port; /* Port used by RoboRIO for controls, default 5800 */
 	} meta;
 
 } ctrl_share;
@@ -46,5 +47,6 @@ void json_to_ctrl_share(ctrl_share *ctrls, char *pathname);
 void april_fill(struct apriltag_stack *astack, ctrl_share ctrls);
 void camera_fill(int fd, ctrl_share ctrls);
 void launch_memory(char *shm_name, ctrl_share *ctrls); /* Puts ctrl structure into a shared memory region */
+char *return_config_location(uint32_t *size); /* Size internally modified */
 
 #endif

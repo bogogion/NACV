@@ -10,11 +10,11 @@ TARGET_PROCESSOR = nacv-processor
 all: $(SRCS)
 	$(CC) $(SRCS) $(TARGET_SRC) $(LIB) -O3 -o $(TARGET) && \
 	$(CC) $(SRCS) $(TARGET_CTRL_SRC) $(LIB) -O3 -o $(TARGET_CTRL) && \
-	$(CC) $(SRCS) $(TARGET_PROCESSOR_SRC) $(LIB) -O3 -o $(TARGET_PROCESSOR)
+	$(CC) $(TARGET_PROCESSOR_SRC) $(SRCS) $(LIB) -o $(TARGET_PROCESSOR)
 install: $(SRCS)
 	@$(CC) $(SRCS) $(TARGET_SRC) $(LIB) -O3 -o $(TARGET) && \
 	$(CC) $(SRCS) $(TARGET_CTRL_SRC) $(LIB) -O3 -o $(TARGET_CTRL) && \
-	$(CC) $(SRCS) $(TARGET_PROCESSOR_SRC) $(LIB) -O3 -o $(TARGET_PROCESSOR) && \
+	$(CC) $(TARGET_PROCESSOR_SRC) $(SRCS) $(LIB) -o $(TARGET_PROCESSOR)
 	mv $(TARGET) /usr/bin/ && \
 	mv $(TARGET_CTRL) /usr/bin && \
 	mv $(TARGET_PROCESSOR) /usr/bin 
