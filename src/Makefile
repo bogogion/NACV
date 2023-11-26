@@ -1,5 +1,5 @@
 CC = gcc
-SRCS = core/*.h camera/* math/* server/* config/*
+SRCS = core/*.h camera/* math/* server/* config/* ../lib/cjson/*
 TARGET_SRC = core/main.c
 TARGET_CTRL_SRC = controller/nacv-controller.c
 TARGET_PROCESSOR_SRC = processor/processor.c

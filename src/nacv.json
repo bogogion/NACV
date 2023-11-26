@@ -5,30 +5,27 @@
 		"max_tags":10,
 		"decimation":3.0,
 		"refine":false
-	}
+	},
 
 	"camera_settings":
 	{
-		"width":640,
-		"height":480,
 		"auto_exposure":true,
 		"exposure_time":1000,
-		"black_and_white":true,
 		"brightness":50,
 		"contrast":0,
 		"saturation":0,
 		"red_balance":0,
 		"blue_balance":0,
 		"sharpness":0,
-		"rotate":0,
-		"sensor_mode":7
-	}
+		"rotate":0
+	},
 
 	"meta":
 	{
 		"team_number":3824,
 		"camera_id":1,
 		"processors":4,
-		"port":5805
+		"port":5805,
+		"controller_port":5800
 	}	
 }

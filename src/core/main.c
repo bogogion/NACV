@@ -35,6 +35,11 @@ int main(int argc, char *argv[])
 	/* Default camera device is video0 */
 	int fd = init_everything(CAMERA_WIDTH,CAMERA_HEIGHT);
 
+	/* Grab config from JSON file, WAHOOOOO!!!!! */
+	ctrl_share config;
+	json_to_ctrl_share(&config,"nacv.json");
+	launch_config_memory(&config);
+
 	/* Check for our magic control */
 	if(check_for_sensormode())
 	{
@@ -66,7 +71,7 @@ int main(int argc, char *argv[])
 
 	/* Cleanup */
 	shm_unlink("nacv_ctrl");	
-
+	cleanup_config_memory();
 	pthread_cancel(thread);
 
 	/* Send kill signal to child processors */

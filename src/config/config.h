@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <apriltag/apriltag.h>
 #include "../camera/processing.h"
 /* Code for all configuration in NACV 
  	 Settings are viewed in JSON format using cJSON
@@ -9,6 +10,7 @@
 #ifndef CONFIG_GLOBAL_SHARE
 #define CONFIG_GLOBAL_SHARE
 
+#define MAX_CONFIG_FILE_LENGTH 512
 typedef struct ctrl_share
 {
 	struct april_ctrls
@@ -39,14 +41,12 @@ typedef struct ctrl_share
 		int camera_id;       /* ID of the Camera (user defined)                 */
 		int port;            /* Port number, default 5805, only 5800-5810 valid */
 		int controller_port; /* Port used by RoboRIO for controls, default 5800 */
+		int processors;
 	} meta;
 
 } ctrl_share;
 
 void json_to_ctrl_share(ctrl_share *ctrls, char *pathname);
-void april_fill(struct apriltag_stack *astack, ctrl_share ctrls);
-void camera_fill(int fd, ctrl_share ctrls);
-void launch_memory(char *shm_name, ctrl_share *ctrls); /* Puts ctrl structure into a shared memory region */
-char *return_config_location(uint32_t *size); /* Size internally modified */
-
+void launch_config_memory(ctrl_share *ctrls); /* Puts ctrl structure into a shared memory region */
+void cleanup_config_memory();
 #endif
