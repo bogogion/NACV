@@ -21,6 +21,7 @@
 #include "camera.h"
 #include "processing.h"
 #include "../core/shared.h"
+#include "../core/nacv.h"
 
 void xioctl(int fh, int request, void *arg)
 {
@@ -180,7 +181,12 @@ void mainloop_shm()
 				/* Handle data */
 				
 				printf("Data was set, frame %i\n",increment++);
-
+				
+				/* Loop through our tags and send them jawns over! */	
+				for(int j = 0; j < datas->data[i].meta.tags_found; j++)
+				{
+					send_message(&datas->data[i].aprild[j]);
+				}
 				/* Once done give ok to process */
 				datas->processes[i] = _M_READY_TO_PROCESS;
 				xioctl(fd, VIDIOC_QBUF, &v_buf);

@@ -25,6 +25,7 @@ void team_number_to_str(int team_number, char buf[11])
 	buf[10] = '\0';
 }
 
+// TODO: remember why i was going to use this please
 void create_valid_server_info(s_info *info, int team_number, uint16_t port, uint32_t camera_id)
 {
 	info->port = htons(port);

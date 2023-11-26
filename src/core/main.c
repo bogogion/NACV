@@ -13,10 +13,6 @@
 #include <sys/mman.h>
 #include <fcntl.h>
 
-/* Settings */
-#define LOWEST_TAG  1
-#define HIGHEST_TAG 8
-
 int run = 1;
 
 /* Handles Ctrl + C end of loop */
@@ -27,6 +23,7 @@ void intHandler(int useless)
 
 int main(int argc, char *argv[])
 {
+	// DUDE FUCK FUCK FUCK MADE THIS UHHHH TODO: make this in JSON SHIT!
 	struct calibration_data cdata;
 	
 	int sfd = shm_open("nacv_ctrl",O_CREAT | O_RDWR, S_IRWXU);	
@@ -39,6 +36,8 @@ int main(int argc, char *argv[])
 	ctrl_share config;
 	json_to_ctrl_share(&config,"nacv.json");
 	launch_config_memory(&config);
+
+	/* TODO: properly set camera configuration settings */
 
 	/* Check for our magic control */
 	if(check_for_sensormode())
@@ -53,9 +52,9 @@ int main(int argc, char *argv[])
 	datashare->main_pid = getpid();
 
 	/* Start server */
-	pthread_t thread;	int iret1;
+	/*pthread_t thread;	int iret1;
 	iret1 = pthread_create(&thread,NULL,thread_function,NULL);
-
+	*/
 	start_stream(fd);
 
 	/* Launch our seperate processors after stream is started */
@@ -63,6 +62,12 @@ int main(int argc, char *argv[])
 
 	/* Handles Ctrl + C end of loop */
 	signal(SIGINT, intHandler);
+
+	/* Start our server */
+
+	char formatted_addr[11];
+	team_number_to_str(config.meta.team_number,formatted_addr);
+	init_server(formatted_addr, config.meta.port);
 
 	while(run)
 	{
@@ -72,7 +77,7 @@ int main(int argc, char *argv[])
 	/* Cleanup */
 	shm_unlink("nacv_ctrl");	
 	cleanup_config_memory();
-	pthread_cancel(thread);
+	//pthread_cancel(thread);
 
 	/* Send kill signal to child processors */
 	for(int i = 0; i < PROCESSORS; i++)

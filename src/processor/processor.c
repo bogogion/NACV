@@ -22,15 +22,16 @@
 
 uint8_t               run = 1;
 int                   identity; /* Identity of process */
-int                   sfd, cfd;
+int                   sfd, cfd, configfd;
 int                   size = SIZE;
+int                   max_tags, dec_thres;
 char                  shm_path[255];
 char                  ctrl_path[255];
 char                  *data;
 struct data_share     *ds;
 unsigned char         *control_byte;
 struct apriltag_stack april_stack;
-
+ctrl_share            *config;
 /* Handles signal */
 void sigHandler(int useless)
 { run = 0; }
@@ -49,15 +50,14 @@ void mainloop()
 
 				/* Setup our detection */
 				convert_rgb24_proper(CAMERA_WIDTH, CAMERA_HEIGHT, april_stack.im->stride, data, april_stack.im);
-				zarray_t *detections = apriltag_detector_detect(april_stack.td, april_stack.im, april_stack.decim, 
-																												DECISION_THRESHOLD, MAX_TAGS);			
+				zarray_t *detections = apriltag_detector_detect(april_stack.td, april_stack.im, april_stack.decim, dec_thres, max_tags);			
 				
 				tags = zarray_size(detections);
 				ds->data[identity].meta.tags_found = tags;
 
 				if(tags != 0)
 				{
-					for(i = 0; i < tags; i++)
+					for(i = 0;i < tags; i++)
 					{
 						zarray_get(detections, i, &april_stack.det);
 
@@ -105,6 +105,10 @@ int main(int argc, char *argv[])
 	cfd  = shm_open(ctrl_path, O_RDWR, 0);
 	ds   = mmap(NULL, sizeof(struct data_share), PROT_READ | PROT_WRITE, MAP_SHARED, cfd, 0);
 
+	/* Setup access to the configuration share */
+	configfd = shm_open("nacv_config",O_RDONLY,0);
+	config   = mmap(NULL, sizeof(ctrl_share), PROT_READ, MAP_SHARED, configfd, 0);
+
 	/* Setup our control_byte for quick access */
 	control_byte = &ds->processes[identity];
 
@@ -112,14 +116,21 @@ int main(int argc, char *argv[])
 	ds->data[identity].meta.pid      = getpid();
 	ds->data[identity].meta.identity = identity;
 
-	for(int i = 0; i < MAX_TAGS; i++)
-	{
-		ds->data[identity].aprild[i].camera_id = CAMERA_ID; // Placeholder 
-	}
-
 	/* Setup AprilTag */
 	create_apriltag_stack(&april_stack, CAMERA_WIDTH, CAMERA_HEIGHT);	
 	
+	/* Apply our detector settings */
+	max_tags = config->april.max_tags;
+	april_stack.td->quad_decimate = config->april.decimation;
+	april_stack.td->refine_edges = config->april.refine; 
+	dec_thres = config->april.decision_threshold;
+	
+	
+	for(int i = 0; i < max_tags; i++)
+	{
+		ds->data[identity].aprild[i].camera_id = config->meta.camera_id; 
+	}
+
 	/* Run mainloop and signal handling */
 	signal(SIGTERM, sigHandler);
 	mainloop();
@@ -130,6 +141,8 @@ int main(int argc, char *argv[])
 	shm_unlink(shm_path);
 	munmap(ds,sizeof(struct data_share));
 	shm_unlink(ctrl_path);
+	munmap(config,sizeof(ctrl_share));
+	shm_unlink("nacv_config");
 
 	return 0;
 }

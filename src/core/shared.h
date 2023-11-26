@@ -9,9 +9,8 @@
 #define _C_DATA_SET         1 << 4  /* 00010000 */
 #define PROCESSING          1 << 5  /* 00100000 */
 
-#define CAMERA_ID           1       /* ID of the camera, user settable.           */
 #define PROCESSORS          4       /* Number of processors needed at runtime     */
-#define MAX_TAGS            10      /* Maximum tags that data can be collected on */
+#define MAX_TAGS            10      /* Needs to also be set in nacv.json TODO: do some dynamic memory garbage */
 
 /* TODO: figure out pose information */
 typedef struct data
