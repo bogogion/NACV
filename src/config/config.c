@@ -28,7 +28,6 @@ void json_to_ctrl_share(ctrl_share *ctrls, char *pathname)
 		return;
 	}
 
-
 	/* WARNING Assumes all values are correct format. If not I have NO IDEA what will happen
 	   Probably the start of the apocalypse or something!!! Remember kids, always check your types
 	   (unless you're me) */
@@ -103,3 +102,17 @@ void cleanup_config_memory()
 	shm_unlink("nacv_config");
 	munmap(config_memroy,sizeof(ctrl_share));
 }
+
+void load_camera_settings(ctrl_share ctrls)
+{
+	/* Load all of our settings from JSON */
+	set_camera_settings(ID_CLASS_CAMERA, 0x9a0901, ctrls.camera.auto_exposure);
+	set_camera_settings(ID_CLASS_CAMERA, 0x9a0902, ctrls.camera.exposure_time_absolute);
+	set_camera_settings(ID_CLASS_USER, 0x980900, ctrls.camera.brightness);
+	set_camera_settings(ID_CLASS_USER, 0x980901, ctrls.camera.contrast);
+	set_camera_settings(ID_CLASS_USER, 0x980902, ctrls.camera.saturation);
+	set_camera_settings(ID_CLASS_USER, 0x98090e, ctrls.camera.red_balance);
+	set_camera_settings(ID_CLASS_USER, 0x98090f, ctrls.camera.blue_balance);
+	set_camera_settings(ID_CLASS_USER, 0x98091b, ctrls.camera.sharpness);
+	set_camera_settings(ID_CLASS_USER, 0x980922, ctrls.camera.rotate);
+}	

@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 	json_to_ctrl_share(&config,"nacv.json");
 	launch_config_memory(&config);
 
-	/* TODO: properly set camera configuration settings */
+	load_camera_settings(config);
 
 	/* Check for our magic control */
 	if(check_for_sensormode())
