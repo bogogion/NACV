@@ -33,6 +33,8 @@ typedef struct data
 		uint32_t   area;        /* Area in pixels of tag             */
 		uint32_t   id;          /* ID of the tag                     */
 		float      angle;       /* Angle from the camera (WIP)       */
+		double     center_x;    /* Center X tag in image             */
+		double     center_y;    /* Center Y tag in image             */
 	} aprild[MAX_TAGS];
 } full_process_data;
 

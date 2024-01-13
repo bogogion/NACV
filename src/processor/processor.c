@@ -64,7 +64,8 @@ void mainloop()
 						/* TODO: finish processing */
 						ds->data[identity].aprild[i].id = april_stack.det->id;
 						ds->data[identity].aprild[i].area = grab_area(april_stack.det->p);
-						
+						ds->data[identity].aprild[i].center_x = april_stack.det->c[0];
+						ds->data[identity].aprild[i].center_y = april_stack.det->c[1];	
 					}
 				} else
 				{
